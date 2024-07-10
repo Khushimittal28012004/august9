@@ -1,8 +1,12 @@
 import React from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import './SignUp.css';
 
+
 function SignUp() {
+  const navigate = useNavigate();
+
   return (
     <Container fluid className="signup-container">
       <div className="logo">LOGO</div>
@@ -38,7 +42,8 @@ function SignUp() {
                 variant="primary" 
                 type="submit" 
                 className="continue-btn button-with-shadow" 
-                block>
+                block
+                onClick={() => navigate('/AcademicInfo')}>
                 Continue
               </Button>
             </Form>
@@ -49,4 +54,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default SignUp;
