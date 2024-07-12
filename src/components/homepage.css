@@ -1,0 +1,98 @@
+/* HomePage.css - Optional for structural or reusable styles */
+
+.container-fluid {
+    padding: 0;
+    background-color: #F5F5F7;
+    min-height: 100vh;
+  }
+  
+  .header-row {
+    background-color: #333333;
+    padding: 10px 0;
+  }
+  
+  .header-col {
+    color: #FFFFFF;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .header-col-logo {
+    padding-left: 40px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .header-col-search {
+    background-color: #444444;
+    border-color: #444444;
+    color: #B0B0B0;
+  }
+  
+  .sidebar {
+    background-color: #FFFFFF;
+    padding: 20px;
+  }
+  
+  .profile-picture {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #E0E0E0;
+    margin: 0 auto;
+  }
+  
+  .profile-name {
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  .sidebar-item {
+    font-weight: bold;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  
+  .sidebar-role {
+    margin-bottom: 10px;
+  }
+  
+  .sidebar-more {
+    color: red;
+    cursor: pointer;
+  }
+  
+  .main-content {
+    padding: 20px;
+  }
+  
+  .content-section {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .people-with-us {
+    margin-top: 20px;
+  }
+  
+  .person-card {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .company-logos {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  

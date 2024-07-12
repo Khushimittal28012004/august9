@@ -1,50 +1,9 @@
-.additional-info-container {
-    background: #F5F5F7;
-    height: 100vh;
-  }
-  
-  .logo {
-    position: absolute;
-    top: 80px;
-    left: 80px !important;
-    font-size: 24px;
-    font-weight: bold;
-  }
-  
-  .additional-info-form {
-    background: #FFFFFF;
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-    max-width: 551px;
-    width: 100%;
-    margin: auto;
-  }
-  
-  .welcome-text {
-    color: rgba(0, 0, 0, 0.5);
-    margin-bottom: 40px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 30px;
-  }
-  
-  .form-control {
-    width: 100%;
-    height: 40px;
-    background-color: #FFFFFF;
-    border: 1px solid rgba(153, 153, 153, 0.97);
-    border-radius: 4px;
-    margin-bottom: 20px;
-    padding-left: 10px;
-    color: rgba(0, 0, 0, 0.5);
-  }
-  
-  .continue-btn {
+/* src/components/AdditionalInformation.css */
+
+.submit-btn {
     background-color: #00BBF0 !important;
     border: none;
-    margin-top: 20px;
-    width: 100%;
+    width: 150px;
     height: 35px;
     padding: 5px;
     border-radius: 10px;
@@ -53,22 +12,14 @@
     font-weight: bold;
   }
   
-  .form-group {
-    margin-bottom: 10px;
-    position: relative;
+  .modal-content {
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
   }
   
-  .checkbox-group {
+  .modal-footer {
     display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .checkbox-group span {
-    color: rgba(0, 0, 0, 0.5);
-  }
-  
-  .checkbox-group a {
-    color: #00BBF0;
+    justify-content: center;
   }
   

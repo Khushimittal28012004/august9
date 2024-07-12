@@ -29,7 +29,16 @@ function PreviousExperience() {
                   className="form-control"
                   value={experience}
                   onChange={(e) => setExperience(e.target.value)}
-                  style={{ width: '475px', height: '40px', backgroundColor: '#FFFFFF', border: '1px solid rgba(153, 153, 153, 0.97)', borderRadius: '4px', marginBottom: '20px', paddingLeft: '10px', color: 'rgba(0, 0, 0, 0.5)' }}
+                  style={{ 
+                    width: '475px', 
+                    height: '40px', 
+                    backgroundColor: '#FFFFFF', 
+                    border: '1px solid rgba(153, 153, 153, 0.97)', 
+                    borderRadius: '4px', 
+                    marginBottom: '20px', 
+                    paddingLeft: '10px', 
+                    color: experience ? '#000000' : 'rgba(0, 0, 0, 0.5)' 
+                  }}
                 />
               </Form.Group>
 
@@ -40,7 +49,16 @@ function PreviousExperience() {
                   className="form-control"
                   value={employmentTitle}
                   onChange={(e) => setEmploymentTitle(e.target.value)}
-                  style={{ width: '475px', height: '40px', backgroundColor: '#FFFFFF', border: '1px solid rgba(153, 153, 153, 0.97)', borderRadius: '4px', marginBottom: '20px', paddingLeft: '10px', color: 'rgba(0, 0, 0, 0.5)' }}
+                  style={{ 
+                    width: '475px', 
+                    height: '40px', 
+                    backgroundColor: '#FFFFFF', 
+                    border: '1px solid rgba(153, 153, 153, 0.97)', 
+                    borderRadius: '4px', 
+                    marginBottom: '20px', 
+                    paddingLeft: '10px', 
+                    color: employmentTitle ? '#000000' : 'rgba(0, 0, 0, 0.5)' 
+                  }}
                 />
               </Form.Group>
 

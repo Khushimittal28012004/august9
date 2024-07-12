@@ -6,6 +6,7 @@ import AcademicInfo from './components/AcademicInfo.jsx';
 import CareerInterests from './components/CareerInterests.jsx';
 import PreviousExperience from './components/PreviousExperience.jsx';
 import AdditionalInformation from './components/AdditionalInformation.jsx'
+import HomePage from './components/homepage.jsx';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/career-interests" element={<CareerInterests />} />
         <Route path="/previous-experience" element={<PreviousExperience />} />
         <Route path="/additional-info" element={<AdditionalInformation />} />
+        <Route path="/home" element={<HomePage />} />
       </Routes>
     </Router>
   );

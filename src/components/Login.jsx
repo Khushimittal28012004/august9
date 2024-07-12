@@ -8,7 +8,7 @@ function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    navigate('/dashboard'); // Change to actual path
+    navigate('/home'); // Navigate to HomePage
   };
 
   return (

@@ -11,7 +11,7 @@ const customStyles = {
     border: '1px solid rgba(153, 153, 153, 0.97)',
     borderRadius: '4px',
     marginBottom: '20px',
-    paddingLeft: '10px',
+    paddingLeft: '1px',
     backgroundColor: '#FFFFFF',
     overflow: 'hidden',
     whiteSpace: 'nowrap', 
@@ -151,6 +151,7 @@ function CareerInterests() {
                   className="form-control"
                   value={jobLocations}
                   onChange={(e) => setJobLocations(e.target.value)}
+                  style={{ color: jobLocations ? '#000000' : 'rgba(0, 0, 0, 0.5)', backgroundColor: '#FFFFFF', border: '1px solid rgba(153, 153, 153, 0.97)', borderRadius: '4px', marginBottom: '20px', paddingLeft: '10px' }}
                 />
               </Form.Group>
 
@@ -159,6 +160,7 @@ function CareerInterests() {
                 type="submit"
                 className="continue-btn button-with-shadow"
                 block
+                style={{ backgroundColor: '#00BBF0', border: 'none', marginTop: '20px', width: '100%', height: '35px', padding: '5px', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.4)', color: '#ffffff', fontWeight: 'bold' }}
               >
                 Continue
               </Button>

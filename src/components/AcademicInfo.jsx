@@ -7,6 +7,8 @@ function AcademicInfo() {
   const [degreeProgram, setDegreeProgram] = useState('');
   const [major, setMajor] = useState('');
   const [customMajor, setCustomMajor] = useState('');
+  const [graduationDate, setGraduationDate] = useState('');
+  const [previousDegrees, setPreviousDegrees] = useState('');
   const navigate = useNavigate();
 
   const handleMajorChange = (e) => {
@@ -29,8 +31,14 @@ function AcademicInfo() {
             <h2 style={{ color: 'rgba(0, 0, 0, 0.5)', marginBottom: '40px', textAlign: 'center', fontWeight: 'bold', fontSize: '30px' }}>Academic Information</h2>
             <Form onSubmit={handleContinue}>
               <Form.Group controlId="formDegreeProgram" className="position-relative">
-                <Form.Control as="select" className="form-control form-select" value={degreeProgram} onChange={(e) => setDegreeProgram(e.target.value)}>
-                  <option value="" disabled hidden>Current Degree Program</option>
+                <Form.Control 
+                  as="select" 
+                  className="form-control form-select" 
+                  value={degreeProgram} 
+                  onChange={(e) => setDegreeProgram(e.target.value)}
+                  style={{ color: degreeProgram ? '#000000' : 'rgba(0, 0, 0, 0.5)', backgroundColor: '#FFFFFF', border: '1px solid rgba(153, 153, 153, 0.97)', borderRadius: '4px', marginBottom: '20px', paddingLeft: '10px' }} 
+                >
+                  <option value="" disabled hidden style={{ color: 'rgba(0, 0, 0, 0.5)' }}>Current Degree Program</option>
                   <option>Bachelor's</option>
                   <option>Master's</option>
                 </Form.Control>
@@ -45,10 +53,17 @@ function AcademicInfo() {
                     value={customMajor}
                     onChange={(e) => setCustomMajor(e.target.value)}
                     onBlur={() => setMajor('')}
+                    style={{ width: '100%', height: '40px', backgroundColor: '#FFFFFF', border: '1px solid rgba(153, 153, 153, 0.97)', borderRadius: '4px', marginBottom: '20px', paddingLeft: '10px', color: customMajor ? '#000000' : 'rgba(0, 0, 0, 0.5)' }}
                   />
                 ) : (
-                  <Form.Control as="select" className="form-control form-select" value={major} onChange={handleMajorChange}>
-                    <option value="" disabled hidden>Major</option>
+                  <Form.Control 
+                    as="select" 
+                    className="form-control form-select" 
+                    value={major} 
+                    onChange={handleMajorChange}
+                    style={{ color: major ? '#000000' : 'rgba(0, 0, 0, 0.5)', backgroundColor: '#FFFFFF', border: '1px solid rgba(153, 153, 153, 0.97)', borderRadius: '4px', marginBottom: '20px', paddingLeft: '10px' }}
+                  >
+                    <option value="" disabled hidden style={{ color: 'rgba(0, 0, 0, 0.5)' }}>Major</option>
                     <option>Computer Science</option>
                     <option>Data Science</option>
                     <option>Business Analytics</option>
@@ -62,6 +77,9 @@ function AcademicInfo() {
                   type="text" 
                   placeholder="Expected graduation date (for e.g May 2025)" 
                   className="form-control" 
+                  value={graduationDate}
+                  onChange={(e) => setGraduationDate(e.target.value)}
+                  style={{ width: '100%', height: '40px', backgroundColor: '#FFFFFF', border: '1px solid rgba(153, 153, 153, 0.97)', borderRadius: '4px', marginBottom: '20px', paddingLeft: '10px', color: graduationDate ? '#000000' : 'rgba(0, 0, 0, 0.5)' }}
                 />
               </Form.Group>
 
@@ -70,6 +88,9 @@ function AcademicInfo() {
                   type="text" 
                   placeholder="Previous Degree(s)" 
                   className="form-control" 
+                  value={previousDegrees}
+                  onChange={(e) => setPreviousDegrees(e.target.value)}
+                  style={{ width: '100%', height: '40px', backgroundColor: '#FFFFFF', border: '1px solid rgba(153, 153, 153, 0.97)', borderRadius: '4px', marginBottom: '20px', paddingLeft: '10px', color: previousDegrees ? '#000000' : 'rgba(0, 0, 0, 0.5)' }}
                 />
               </Form.Group>
 
@@ -77,7 +98,8 @@ function AcademicInfo() {
                 variant="primary" 
                 type="submit" 
                 className="continue-btn button-with-shadow" 
-                block>
+                block
+                style={{ backgroundColor: '#00BBF0', border: 'none', marginTop: '20px', width: '100%', height: '35px', padding: '5px', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.4)', color: '#ffffff', fontWeight: 'bold' }}>
                 Continue
               </Button>
             </Form>
