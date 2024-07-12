@@ -76,6 +76,48 @@ const HomePage = () => {
           </div>
         </Col>
       </Row>
+
+      <Row>
+        <Col xs={2} style={{ backgroundColor: '#FFFFFF', padding: '20px' }}>
+          <div style={{ textAlign: 'center' }}>
+            {/* Profile Picture and Name */}
+          </div>
+          <div style={{ marginTop: '30px' }}>
+            <div style={{ fontWeight: 'light', marginBottom: '10px', cursor: 'pointer' }}>People in different Roles</div>
+            <div style={{ fontWeight: 'bold', marginBottom: '10px', cursor: 'pointer' }}>Data Scientist</div>
+            <div style={{ fontWeight: 'bold', marginBottom: '10px', cursor: 'pointer' }}>Data Analyst</div>
+            <div style={{ fontWeight: 'bold', marginBottom: '10px', cursor: 'pointer' }}>Data Engineer</div>
+            <div style={{ color: 'red', cursor: 'pointer' }}>+200 more</div>
+          </div>
+          <div style={{ marginTop: '30px' }}>
+            <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>Job Based On Skills</div>
+            <Form>
+              <Form.Check type="checkbox" label="SQL" style={{ marginBottom: '10px' }} />
+              <Form.Check type="checkbox" label="Python" style={{ marginBottom: '10px' }} />
+              <Form.Check type="checkbox" label="Tableau" style={{ marginBottom: '10px' }} />
+              <div style={{ color: 'red', cursor: 'pointer' }}>+200 more</div>
+            </Form>
+          </div>
+        </Col>
+        <Col xs={10} style={{ padding: '20px' }}>
+          <div style={{ marginTop: '20px' }}>
+            <h3>Find Company Based on size</h3>
+            <Row>
+              {Array(3).fill().map((_, idx) => (
+                <Col key={idx} xs={4} style={{ padding: '20px' }}>
+                  <div style={{ backgroundColor: '#FFFFFF', borderRadius: '8px', padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', textAlign: 'center' }}>
+                    <div style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: '#E0E0E0', margin: '0 auto' }}></div>
+                    <div style={{ fontWeight: 'bold', marginTop: '10px' }}>Company name</div>
+                    <div>Company</div>
+                    <div>Info</div>
+                    <Button variant="outline-success" style={{ marginTop: '10px', borderColor: '#28a745', color: '#28a745' }}>Read more</Button>
+                  </div>
+                </Col>
+              ))}
+            </Row>
+          </div>
+        </Col>
+      </Row>
     </Container>
   );
 };
