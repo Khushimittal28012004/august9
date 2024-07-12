@@ -3,14 +3,6 @@
   height: 100vh;
 }
 
-.academic-logo {
-  position: absolute;
-  top: 80px !important;
-  left: 80px !important;
-  font-size: 24px;
-  font-weight: bold;
-}
-
 .academic-info-form {
   background: #FFFFFF;
   padding: 40px;

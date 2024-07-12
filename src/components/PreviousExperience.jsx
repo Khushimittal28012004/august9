@@ -11,7 +11,7 @@ function PreviousExperience() {
 
   const handleContinue = (e) => {
     e.preventDefault();
-    navigate('/additional-information'); // Adjust this to navigate to the correct next page
+    navigate('/additional-info'); // Adjust this to navigate to the correct next page
   };
 
   return (

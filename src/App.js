@@ -5,8 +5,7 @@ import SignUp from './components/SignUp.jsx';
 import AcademicInfo from './components/AcademicInfo.jsx';
 import CareerInterests from './components/CareerInterests.jsx';
 import PreviousExperience from './components/PreviousExperience.jsx';
-import AdditionalInformation from './components/AdditionalInformation.jsx';
-
+import AdditionalInformation from './components/AdditionalInformation.jsx'
 
 function App() {
   return (
@@ -15,10 +14,9 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/academic-info" element={<AcademicInfo />} />
-        <Route path="/previous-experience" element={<PreviousExperience />} />
         <Route path="/career-interests" element={<CareerInterests />} />
-        <Route path="/additional-information" element={<AdditionalInformation />} />
-
+        <Route path="/previous-experience" element={<PreviousExperience />} />
+        <Route path="/additional-info" element={<AdditionalInformation />} />
       </Routes>
     </Router>
   );
