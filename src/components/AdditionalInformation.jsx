@@ -60,12 +60,12 @@ function AdditionalInformation() {
                 <p style={{ marginBottom: '20px' }}>Review all entered information</p>
               </Form.Group>
 
-              <Form.Group controlId="formAgreement" className="text-center">
+              <Form.Group controlId="formAgreement" className="text-center" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Form.Check 
                   type="checkbox" 
                   label={<span>Agree to <a href="/user-agreement" target="_blank">user agreement</a> and <a href="/privacy-policy" target="_blank">privacy policy</a> of Rolync</span>} 
                   required 
-                  style={{ display: 'inline-block', marginRight: '10px' }}
+                  style={{ marginRight: '10px' }}
                 />
               </Form.Group>
 
