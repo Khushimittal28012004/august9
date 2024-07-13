@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import './AcademicInfo.css';
 
+
 function AcademicInfo() {
   const [degreeProgram, setDegreeProgram] = useState('');
   const [major, setMajor] = useState('');
