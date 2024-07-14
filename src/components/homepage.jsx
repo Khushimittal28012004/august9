@@ -27,10 +27,10 @@ const HomePage = () => {
       </Row>
       <div style={{ padding: '0 40px' }}>
         <Row>
-          <Col xs={2} style={{ backgroundColor: '#FFFFFF', padding: '20px' }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: '#E0E0E0', margin: '0 auto' }}></div>
-              <div style={{ fontWeight: 'bold', marginTop: '10px' }}>NAME</div>
+          <Col xs={3} style={{ backgroundColor: '#F5F5F7', padding: '20px' }}>
+            <div style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', textAlign: 'center', height: '300px', marginBottom: '30px' }}>
+              <div style={{ width: '200px', height: '200px', borderRadius: '50%', backgroundColor: '#E0E0E0', margin: '0 auto' }}></div>
+              <div style={{ fontWeight: 'bold', marginTop: '10px', fontSize: '24px' }}>NAME</div>
             </div>
             <div style={{ marginTop: '30px' }}>
               <div style={{ fontWeight: 'bold', marginBottom: '10px', cursor: 'pointer' }}>My Profile</div>
@@ -50,24 +50,23 @@ const HomePage = () => {
                 <Form.Check type="checkbox" label="SQL" style={{ marginBottom: '10px' }} />
                 <Form.Check type="checkbox" label="Python" style={{ marginBottom: '10px' }} />
                 <Form.Check type="checkbox" label="Tableau" style={{ marginBottom: '10px' }} />
-                <div style={{ color: 'red', cursor: 'pointer' }}>+200 more</div>
               </Form>
             </div>
           </Col>
-          <Col xs={10} style={{ padding: '20px' }}>
-            <div style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '8px', textAlign: 'center', height: '300px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', position: 'relative' }}>
-              <Button variant="success" style={{ backgroundColor: '#28a745', border: 'none', position: 'absolute', bottom: '20px', left: '20px', fontSize: '18px', padding: '10px 30px' }}>
+          <Col xs={9} style={{ padding: '20px' }}>
+            <div style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '8px', textAlign: 'center', height: '300px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', position: 'relative', marginBottom: '30px' }}>
+              <Button variant="success" style={{ backgroundColor: '#28a745', border: 'none', position: 'absolute', bottom: '20px', left: '40px', fontSize: '20px', padding: '15px 40px' }}>
                 Find your Dream
               </Button>
             </div>
-            <div style={{ marginTop: '20px' }}>
-              <h3>People with us</h3>
+            <div style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', marginBottom: '30px' }}>
+              <h3 style={{ fontSize: '20px', marginBottom: '20px' }}>People with us</h3>
               <Row>
                 {Array(3).fill().map((_, idx) => (
                   <Col key={idx} xs={4} style={{ padding: '20px' }}>
-                    <div style={{ backgroundColor: '#FFFFFF', borderRadius: '8px', padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', textAlign: 'center' }}>
-                      <div style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: '#E0E0E0', margin: '0 auto' }}></div>
-                      <div style={{ fontWeight: 'bold', marginTop: '10px' }}>Ritika Rauthan</div>
+                    <div style={{ backgroundColor: '#FFFFFF', borderRadius: '8px', padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', textAlign: 'center', height: '350px' }}>
+                      <img src="https://via.placeholder.com/150" alt="Profile" style={{ width: '100%', height: '200px', borderRadius: '8px', objectFit: 'cover' }} />
+                      <div style={{ fontWeight: 'bold', marginTop: '10px', fontSize: '18px' }}>Ritika Rauthan</div>
                       <div>Company</div>
                       <div>Data Scientist</div>
                       <Button variant="outline-success" style={{ marginTop: '10px', borderColor: '#28a745', color: '#28a745' }}>Read more</Button>
@@ -76,17 +75,17 @@ const HomePage = () => {
                 ))}
               </Row>
             </div>
-            <div style={{ marginTop: '20px' }}>
-              <h3>Companies they Work at</h3>
-              <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', padding: '20px', backgroundColor: '#FFFFFF', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+            <div style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', marginBottom: '30px' }}>
+              <h3 style={{ fontSize: '20px', marginBottom: '20px' }}>Companies they Work at</h3>
+              <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                 <img src="amazon-logo.png" alt="Amazon" style={{ width: '100px' }} />
                 <img src="microsoft-logo.png" alt="Microsoft" style={{ width: '100px' }} />
                 <img src="google-logo.png" alt="Google" style={{ width: '100px' }} />
                 <img src="carenane-logo.png" alt="Carenane" style={{ width: '100px' }} />
               </div>
             </div>
-            <div style={{ marginTop: '20px' }}>
-              <h3>Find Company Based on size</h3>
+            <div style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', marginBottom: '30px' }}>
+              <h3 style={{ fontSize: '20px', marginBottom: '20px' }}>Find Company Based on size</h3>
               <Row>
                 {Array(3).fill().map((_, idx) => (
                   <Col key={idx} xs={4} style={{ padding: '20px' }}>
@@ -101,9 +100,9 @@ const HomePage = () => {
                 ))}
               </Row>
             </div>
-            <div style={{ marginTop: '20px' }}>
-              <h3>Some text with Image</h3>
-              <div style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '8px', textAlign: 'center' }}>
+            <div style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', marginBottom: '30px' }}>
+              <h3 style={{ fontSize: '20px', marginBottom: '20px' }}>Some text with Image</h3>
+              <div style={{ textAlign: 'center' }}>
                 <Button variant="success" style={{ backgroundColor: '#28a745', border: 'none' }}>Find me the best jobs</Button>
               </div>
             </div>
