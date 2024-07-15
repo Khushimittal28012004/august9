@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import axios from 'axios';
 import './Login.css';
+// Remove the incorrect import
+// import { fetchItems, createItem } from 'khushim/src/api.js'; 
 
 function Login() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    navigate('/home'); // Navigate to HomePage
+    
+    try {
+      const response = await axios.post('http://localhost:5000/login', { email, password });
+      if (response.status === 200) {
+        navigate('/home'); // Corrected navigation path
+      }
+    } catch (err) {
+      setError('Login failed. Please check your credentials.');
+    }
   };
 
   return (
@@ -25,21 +40,28 @@ function Login() {
         <Col md={6} className="d-flex justify-content-center">
           <div className="login-form">
             <h2 className="login-welcome-text">Welcome to Rolync</h2>
+            {error && <p className="text-danger">{error}</p>}
             <Form onSubmit={handleLogin}>
               <Form.Group controlId="formEmail">
                 <Form.Control 
                   type="email" 
                   placeholder="Enter Your UTD email address" 
                   className="login-form-control" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Form.Group>
               <Form.Group controlId="formPassword" className="position-relative">
                 <Form.Control 
-                  type="password" 
+                  type={showPassword ? "text" : "password"} // Toggle visibility
                   placeholder="Password" 
                   className="login-form-control" 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
-                <span className="login-show-password">Show</span>
+                <span className="login-show-password" onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? "Hide" : "Show"}
+                </span>
               </Form.Group>
               <Button 
                 variant="primary" 
