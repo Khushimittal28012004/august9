@@ -1,124 +1,111 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Form } from 'react-bootstrap';
+import { fetchJobData, fetchUserProfiles } from './apiService'; // Adjust the import path as needed
 import './homepage.css';
 
 const HomePage = () => {
+  const [jobs, setJobs] = useState([]);
+  const [profiles, setProfiles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const jobData = await fetchJobData();
+        setJobs(jobData);
+        const userProfiles = await fetchUserProfiles();
+        setProfiles(userProfiles);
+      } catch (error) {
+        setError("Error loading data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
   return (
-    <Container fluid style={{ padding: 0, backgroundColor: '#F5F5F7', minHeight: '100vh' }}>
-      <Row style={{ backgroundColor: '#333333', padding: '10px 0' }}>
-        <Col xs={2} style={{ color: '#FFFFFF', textAlign: 'center', cursor: 'pointer', paddingLeft: '40px', fontSize: '24px', fontWeight: 'bold' }}>
+    <Container fluid className="homepage-container">
+      <Row className="header-row">
+        <Col xs={2} className="logo-column">
           LOGO
         </Col>
         <Col xs={7}>
-          <Form.Control type="text" placeholder="Search" style={{ backgroundColor: '#444444', borderColor: '#444444', color: '#B0B0B0' }} />
+          <Form.Control type="text" placeholder="Search" className="search-input" />
         </Col>
-        <Col xs={1} style={{ color: '#FFFFFF', textAlign: 'center', cursor: 'pointer' }}>
-          COMPANIES
-        </Col>
-        <Col xs={1} style={{ color: '#FFFFFF', textAlign: 'center', cursor: 'pointer' }}>
-          ROLES
-        </Col>
-        <Col xs={1} style={{ color: '#FFFFFF', textAlign: 'center', cursor: 'pointer' }}>
-          BLOGS
-        </Col>
-        <Col xs={1} style={{ color: '#FFFFFF', textAlign: 'center', cursor: 'pointer' }}>
-          <i className="fas fa-user" style={{ fontSize: '24px' }}></i>
+        <Col xs={1} className="header-item">COMPANIES</Col>
+        <Col xs={1} className="header-item">ROLES</Col>
+        <Col xs={1} className="header-item">BLOGS</Col>
+        <Col xs={1} className="header-item">
+          <i className="fas fa-user"></i>
         </Col>
       </Row>
-      <div style={{ padding: '0 40px' }}>
+      <div className="main-content">
         <Row>
-          <Col xs={3} style={{ backgroundColor: '#F5F5F7', padding: '20px' }}>
-            <div style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', textAlign: 'center', height: '300px', marginBottom: '30px' }}>
-              <div style={{ width: '200px', height: '200px', borderRadius: '50%', backgroundColor: '#E0E0E0', margin: '0 auto' }}></div>
-              <div style={{ fontWeight: 'bold', marginTop: '10px', fontSize: '24px' }}>NAME</div>
+          <Col xs={3} className="sidebar">
+            {/* Sidebar content */}
+            <div className="profile-card">
+              <div className="profile-image"></div>
+              <div className="profile-name">NAME</div>
             </div>
-            <div style={{ marginTop: '30px' }}>
-              <div style={{ fontWeight: 'bold', marginBottom: '10px', cursor: 'pointer' }}>My Profile</div>
-              <div style={{ fontWeight: 'bold', marginBottom: '10px', cursor: 'pointer' }}>My Matches</div>
-              <div style={{ fontWeight: 'bold', marginBottom: '10px', cursor: 'pointer' }}>My Jobs</div>
-              <div style={{ fontWeight: 'bold', marginBottom: '10px', cursor: 'pointer' }}>My Favorites</div>
+            <div className="sidebar-menu">
+              <div className="menu-item">My Profile</div>
+              <div className="menu-item">My Matches</div>
+              <div className="menu-item">My Jobs</div>
+              <div className="menu-item">My Favorites</div>
             </div>
-            <div style={{ marginTop: '30px' }}>
-              <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>People in different roles</div>
-              <div style={{ marginBottom: '10px' }}>Data Scientist</div>
-              <div style={{ marginBottom: '10px' }}>Data Analyst</div>
-              <div style={{ marginBottom: '10px' }}>Data Engineer</div>
+            <div className="roles-section">
+              <div className="section-title">People in different roles</div>
+              <div className="role-item">Data Scientist</div>
+              <div className="role-item">Data Analyst</div>
+              <div className="role-item">Data Engineer</div>
             </div>
-            <div style={{ marginTop: '30px' }}>
-              <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>Job Based On Skills</div>
+            <div className="skills-section">
+              <div className="section-title">Job Based On Skills</div>
               <Form>
-                <Form.Check type="checkbox" label="SQL" style={{ marginBottom: '10px' }} />
-                <Form.Check type="checkbox" label="Python" style={{ marginBottom: '10px' }} />
-                <Form.Check type="checkbox" label="Tableau" style={{ marginBottom: '10px' }} />
+                <Form.Check type="checkbox" label="SQL" />
+                <Form.Check type="checkbox" label="Python" />
+                <Form.Check type="checkbox" label="Tableau" />
               </Form>
             </div>
           </Col>
-          <Col xs={9} style={{ padding: '20px' }}>
-            <div style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '8px', textAlign: 'center', height: '300px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', position: 'relative', marginBottom: '30px' }}>
-              <Button variant="success" style={{ backgroundColor: '#28a745', border: 'none', position: 'absolute', bottom: '20px', left: '40px', fontSize: '20px', padding: '15px 40px' }}>
+          <Col xs={9} className="main-content-col">
+            {/* Main content */}
+            <div className="find-job-card">
+              <Button variant="success" className="find-job-button">
                 Find your Dream
               </Button>
             </div>
-            <div style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', marginBottom: '30px' }}>
-              <h3 style={{ fontSize: '20px', marginBottom: '20px' }}>People with us</h3>
+            <div className="profiles-section">
+              <h3 className="section-title">People with us</h3>
               <Row>
-                {Array(3).fill().map((_, idx) => (
-                  <Col key={idx} xs={4} style={{ padding: '20px' }}>
-                    <div style={{ backgroundColor: '#FFFFFF', borderRadius: '8px', padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', textAlign: 'center', height: '350px' }}>
-                      <img src="https://via.placeholder.com/150" alt="Profile" style={{ width: '100%', height: '200px', borderRadius: '8px', objectFit: 'cover' }} />
-                      <div style={{ fontWeight: 'bold', marginTop: '10px', fontSize: '18px' }}>Ritika Rauthan</div>
-                      <div>Company</div>
-                      <div>Data Scientist</div>
-                      <Button variant="outline-success" style={{ marginTop: '10px', borderColor: '#28a745', color: '#28a745' }}>Read more</Button>
+                {profiles.map((profile, idx) => (
+                  <Col key={idx} xs={4} className="profile-col">
+                    <div className="profile-card">
+                      <img src={profile.imageUrl} alt="Profile" className="profile-image" />
+                      <div className="profile-name">{profile.name}</div>
+                      <div className="profile-company">{profile.company}</div>
+                      <div className="profile-role">{profile.role}</div>
+                      <Button variant="outline-success" className="read-more-button">Read more</Button>
                     </div>
                   </Col>
                 ))}
               </Row>
             </div>
-            <div style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', marginBottom: '30px' }}>
-              <h3 style={{ fontSize: '20px', marginBottom: '20px' }}>Companies they Work at</h3>
-              <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                <img src="amazon-logo.png" alt="Amazon" style={{ width: '100px' }} />
-                <img src="microsoft-logo.png" alt="Microsoft" style={{ width: '100px' }} />
-                <img src="google-logo.png" alt="Google" style={{ width: '100px' }} />
-                <img src="carenane-logo.png" alt="Carenane" style={{ width: '100px' }} />
-              </div>
-            </div>
-            <div style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', marginBottom: '30px' }}>
-              <h3 style={{ fontSize: '20px', marginBottom: '20px' }}>Find Company Based on size</h3>
-              <Row>
-                {Array(3).fill().map((_, idx) => (
-                  <Col key={idx} xs={4} style={{ padding: '20px' }}>
-                    <div style={{ backgroundColor: '#FFFFFF', borderRadius: '8px', padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', textAlign: 'center' }}>
-                      <div style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: '#E0E0E0', margin: '0 auto' }}></div>
-                      <div style={{ fontWeight: 'bold', marginTop: '10px' }}>Company name</div>
-                      <div>Company</div>
-                      <div>Info</div>
-                      <Button variant="outline-success" style={{ marginTop: '10px', borderColor: '#28a745', color: '#28a745' }}>Read more</Button>
-                    </div>
-                  </Col>
-                ))}
-              </Row>
-            </div>
-            <div style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', marginBottom: '30px' }}>
-              <h3 style={{ fontSize: '20px', marginBottom: '20px' }}>Some text with Image</h3>
-              <div style={{ textAlign: 'center' }}>
-                <Button variant="success" style={{ backgroundColor: '#28a745', border: 'none' }}>Find me the best jobs</Button>
+            <div className="companies-section">
+              <h3 className="section-title">Companies they Work at</h3>
+              <div className="company-logos">
+                <img src="amazon-logo.png" alt="Amazon" className="company-logo" />
+                <img src="microsoft-logo.png" alt="Microsoft" className="company-logo" />
+                <img src="google-logo.png" alt="Google" className="company-logo" />
+                <img src="carenane-logo.png" alt="Carenane" className="company-logo" />
               </div>
             </div>
           </Col>
         </Row>
       </div>
-      <footer style={{ backgroundColor: '#333333', color: '#FFFFFF', padding: '10px 0', textAlign: 'center' }}>
-        <Row>
-          <Col xs={6}>
-            <p>Copyright 2024 . Terms and Conditions . User Agreement . Contact Us . About Us . Feedback</p>
-          </Col>
-          <Col xs={6}>
-            <p>HAVE A QUERY? CONTACT US</p>
-          </Col>
-        </Row>
-      </footer>
     </Container>
   );
 };
