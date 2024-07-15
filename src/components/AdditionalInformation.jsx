@@ -9,16 +9,34 @@ function AdditionalInformation() {
   const [hobbies, setHobbies] = useState('');
   const [agreement, setAgreement] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setShowModal(true);
+    if (!linkedin || !portfolio || !hobbies) {
+      setError('Please fill in all fields.');
+      return;
+    }
+
+    if (!agreement) {
+      setError('You must agree to the user agreement and privacy policy.');
+      return;
+    }
+
+    try {
+      // Assume `createitem` is a function to submit the form data
+      await createitem({ linkedin, portfolio, hobbies });
+      setShowModal(true);
+    } catch (error) {
+      console.error('Error submitting additional information:', error);
+      setError('Failed to submit information.');
+    }
   };
 
   const handleOkClick = () => {
     setShowModal(false);
-    navigate('/'); // Redirect to the login page
+    navigate('/login'); // Redirect to the login page
   };
 
   return (
@@ -28,12 +46,12 @@ function AdditionalInformation() {
         <Col md={6} className="d-flex justify-content-center">
           <div style={{ background: '#FFFFFF', padding: '40px', borderRadius: '8px', boxShadow: '0 4px 4px rgba(0, 0, 0, 0.25)', maxWidth: '551px', width: '100%', margin: 'auto' }}>
             <h2 style={{ color: 'rgba(0, 0, 0, 0.5)', marginBottom: '40px', textAlign: 'center', fontWeight: 'bold', fontSize: '30px' }}>Additional Information</h2>
+            {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
             <Form onSubmit={handleSubmit}>
               <Form.Group controlId="formLinkedin">
                 <Form.Control
                   type="text"
-                  placeholder="Linkedin"
-                  className="form-control"
+                  placeholder="LinkedIn"
                   value={linkedin}
                   onChange={(e) => setLinkedin(e.target.value)}
                   style={{ marginBottom: '20px' }}
@@ -42,8 +60,7 @@ function AdditionalInformation() {
               <Form.Group controlId="formPortfolio">
                 <Form.Control
                   type="text"
-                  placeholder="Portfolio/Personal website"
-                  className="form-control"
+                  placeholder="Portfolio/Personal Website"
                   value={portfolio}
                   onChange={(e) => setPortfolio(e.target.value)}
                   style={{ marginBottom: '20px' }}
@@ -53,21 +70,20 @@ function AdditionalInformation() {
                 <Form.Control
                   type="text"
                   placeholder="Hobbies and Interests"
-                  className="form-control"
                   value={hobbies}
                   onChange={(e) => setHobbies(e.target.value)}
                   style={{ marginBottom: '20px' }}
                 />
               </Form.Group>
               <p style={{ textAlign: 'left', color: 'black', marginBottom: '20px' }}>Review all entered information</p>
-              <Form.Group controlId="formAgreement" className="d-flex align-items-center justify-content-center" style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Form.Group controlId="formAgreement" className="d-flex align-items-center" style={{ marginBottom: '20px' }}>
                 <input
                   type="checkbox"
                   checked={agreement}
                   onChange={(e) => setAgreement(e.target.checked)}
                   style={{ marginRight: '10px' }}
                 />
-                <label style={{ color: 'black', marginBottom: '0' }}>
+                <label style={{ color: 'black' }}>
                   Agree to <a href="/user-agreement" style={{ color: '#00BBF0' }}>user agreement</a> and <a href="/privacy-policy" style={{ color: '#00BBF0' }}>privacy policy</a> of Rolync
                 </label>
               </Form.Group>
@@ -75,7 +91,6 @@ function AdditionalInformation() {
                 <Button
                   variant="primary"
                   type="submit"
-                  className="submit-btn button-with-shadow"
                   disabled={!agreement}
                   style={{ backgroundColor: '#00BBF0', border: 'none', width: '150px', height: '35px', padding: '5px', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.4)', color: '#ffffff', fontWeight: 'bold' }}
                 >
@@ -93,7 +108,7 @@ function AdditionalInformation() {
         </Modal.Header>
         <Modal.Body>Your information has been submitted successfully.</Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleOkClick} style={{ backgroundColor: '#00BBF0', border: 'none', width: '150px', height: '35px', padding: '5px', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.4)', color: '#ffffff', fontWeight: 'bold', margin: 'auto' }}>
+          <Button variant="primary" onClick={handleOkClick} style={{ backgroundColor: '#00BBF0', border: 'none', width: '150px', height: '35px', padding: '5px', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.4)', color: '#ffffff', fontWeight: 'bold' }}>
             OK
           </Button>
         </Modal.Footer>
