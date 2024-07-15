@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import CreatableSelect from 'react-select/creatable';
+import axios from 'axios';
 import './CareerInterests.css';
+// import {createitem } from 'khushim/src/api.js';
 
 const customStyles = {
   control: (provided, state) => ({
@@ -21,7 +23,7 @@ const customStyles = {
     ...provided,
     flexWrap: 'wrap',
     overflow: 'auto',
-    maxHeight: '80px'  // Maximum height for the container to avoid excessive growth
+    maxHeight: '80px',
   }),
   placeholder: (provided) => ({
     ...provided,
@@ -86,18 +88,50 @@ function CareerInterests() {
   const [selectedIndustries, setSelectedIndustries] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [jobLocations, setJobLocations] = useState('');
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
+  const userEmail = 'user@example.com'; // Replace with actual user email from authentication context or state
 
-  const handleContinue = (e) => {
+  useEffect(() => {
+    const fetchCareerInterests = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/career-interests/${userEmail}`);
+        const { roles, industries, skills, jobLocations } = response.data || {};
+        setSelectedRoles(roles?.map(role => ({ value: role, label: role })) || []);
+        setSelectedIndustries(industries?.map(industry => ({ value: industry, label: industry })) || []);
+        setSelectedSkills(skills?.map(skill => ({ value: skill, label: skill })) || []);
+        setJobLocations(jobLocations || '');
+      } catch (error) {
+        console.error('Error fetching career interests:', error);
+        setError('Failed to fetch career interests.');
+      }
+    };
+
+    fetchCareerInterests();
+  }, [userEmail]);
+
+  const handleContinue = async (e) => {
     e.preventDefault();
-    navigate('/previous-experience');
+    try {
+      await axios.post('http://localhost:5000/career-interests', {
+        email: userEmail,
+        roles: selectedRoles.map(role => role.value),
+        industries: selectedIndustries.map(industry => industry.value),
+        skills: selectedSkills.map(skill => skill.value),
+        jobLocations
+      });
+      navigate('/previous-experience');
+    } catch (error) {
+      console.error('Error saving career interests:', error);
+      setError('Failed to save career interests.');
+    }
   };
 
   const handleCreateOption = (inputValue, setOptions, setSelected) => {
     const newOption = { value: inputValue, label: inputValue };
-    setOptions((prev) => [...prev, newOption]);
-    setSelected((prev) => [...prev, newOption]);
+    setOptions(prev => [...prev, newOption]);
+    setSelected(prev => [...prev, newOption]);
   };
 
   return (
@@ -107,6 +141,7 @@ function CareerInterests() {
         <Col md={6} className="d-flex justify-content-center">
           <div style={{ background: '#FFFFFF', padding: '40px', borderRadius: '8px', boxShadow: '0 4px 4px rgba(0, 0, 0, 0.25)', maxWidth: '551px', width: '100%', margin: 'auto' }}>
             <h2 style={{ color: 'rgba(0, 0, 0, 0.5)', marginBottom: '40px', textAlign: 'center', fontWeight: 'bold', fontSize: '30px' }}>Career Interests</h2>
+            {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
             <Form onSubmit={handleContinue}>
               <Form.Group controlId="formJobRoles">
                 <CreatableSelect
