@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button, Modal } from 'react-bootstrap';
 import './AdditionalInformation.css';
+import { createItem } from '../api'; // Correctly import createItem function
 
 function AdditionalInformation() {
   const [linkedin, setLinkedin] = useState('');
@@ -25,8 +26,7 @@ function AdditionalInformation() {
     }
 
     try {
-      // Assume `createitem` is a function to submit the form data
-      await createitem({ linkedin, portfolio, hobbies });
+      await createItem({ linkedin, portfolio, hobbies });
       setShowModal(true);
     } catch (error) {
       console.error('Error submitting additional information:', error);

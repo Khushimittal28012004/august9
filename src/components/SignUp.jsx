@@ -4,7 +4,7 @@ import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 // import { createItem } from '../api'; // Import API function
 import './SignUp.css';
 import { createItem } from '../api'; // Correct relative path
-import { fetchItems, createItem } from '../api.js'; // Correct relative path
+import { fetchItems } from '../api.js'; // Correct relative path
 
 
 

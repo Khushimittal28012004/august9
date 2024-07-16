@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Form } from 'react-bootstrap';
-import { fetchJobData, fetchUserProfiles } from './apiService'; // Adjust the import path as needed
+import { fetchJobData, fetchUserProfiles } from '../services/apiService'; // Adjust the import path as needed
+
 import './homepage.css';
 
 const HomePage = () => {
