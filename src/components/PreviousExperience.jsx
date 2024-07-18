@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { fetchItems } from '../api'; // Import API function
 import './PreviousExperience.css';
+// import { fetchItems, createItem } from 'khushim/src/api.js';
 
 function PreviousExperience() {
   const [experience, setExperience] = useState('');
   const [employmentTitle, setEmploymentTitle] = useState('');
+  const [items, setItems] = useState([]);
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const loadItems = async () => {
+      const fetchedItems = await fetchItems();
+      setItems(fetchedItems);
+    };
+
+    loadItems();
+  }, []);
+
   const handleContinue = (e) => {
     e.preventDefault();
-    navigate('/additional-info'); // Adjust this to navigate to the correct next page
+    navigate('/AdditionalInformation.jsx'); // Adjust this to navigate to the correct next page
   };
 
   return (

@@ -1,6 +1,6 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -8,42 +8,62 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// MongoDB connection
-mongoose.connect('mongodb://localhost:27017/mydatabase');
+// Replace with your MongoDB connection string
+const uri = 'your-mongodb-connection-string';
 
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 connection.once('open', () => {
   console.log('MongoDB database connection established successfully');
 });
 
-// Define a simple schema and model for demonstration
-const itemSchema = new mongoose.Schema({
-  name: String,
-  description: String
+// Career Interest Schema
+const careerInterestSchema = new mongoose.Schema({
+  email: { type: String, required: true },
+  roles: [String],
+  industries: [String],
+  skills: [String],
+  jobLocations: String,
 });
 
-const Item = mongoose.model('Item', itemSchema);
+const CareerInterest = mongoose.model('CareerInterest', careerInterestSchema);
 
-// Define routes
-app.get('/items', async (req, res) => {
+// Get career interests for a user
+app.get('/career-interests/:email', async (req, res) => {
   try {
-    const items = await Item.find();
-    res.json(items);
-  } catch (err) {
-    res.status(500).send(err);
+    const careerInterest = await CareerInterest.findOne({ email: req.params.email });
+    res.json(careerInterest);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching career interests', error });
   }
 });
 
-app.post('/items', async (req, res) => {
-  const newItem = new Item(req.body);
+// Save or update career interests
+app.post('/career-interests', async (req, res) => {
+  const { email, roles, industries, skills, jobLocations } = req.body;
+
   try {
-    await newItem.save();
-    res.status(201).send(newItem);
-  } catch (err) {
-    res.status(400).send(err);
+    let careerInterest = await CareerInterest.findOne({ email });
+
+    if (careerInterest) {
+      careerInterest.roles = roles;
+      careerInterest.industries = industries;
+      careerInterest.skills = skills;
+      careerInterest.jobLocations = jobLocations;
+    } else {
+      careerInterest = new CareerInterest({ email, roles, industries, skills, jobLocations });
+    }
+
+    await careerInterest.save();
+    res.status(200).json({ message: 'Career interests saved successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error saving career interests', error });
   }
 });
 
+// Start the server
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });
+
+

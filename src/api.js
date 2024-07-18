@@ -8,6 +8,7 @@ export const fetchItems = async () => {
     return response.data;
   } catch (error) {
     console.error('Error fetching items:', error);
+    return [];
   }
 };
 
@@ -17,5 +18,6 @@ export const createItem = async (item) => {
     return response.data;
   } catch (error) {
     console.error('Error creating item:', error);
+    return null;
   }
 };
