@@ -1,0 +1,78 @@
+/* AboutUs.css */
+
+.container-fluid {
+    padding: 0;
+    background-color: #F5F5F7;
+    min-height: 100vh;
+  }
+  
+  .header-row {
+    background-color: #333333;
+    padding: 10px 0;
+  }
+  
+  .header-col {
+    color: #FFFFFF;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .header-col-logo {
+    padding-left: 40px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .header-col-search {
+    display: flex;
+    align-items: center;
+  }
+  
+  .header-col-search input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+  }
+  
+  .header-col-links {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  
+  .header-col-link {
+    cursor: pointer;
+  }
+  
+  .main-content {
+    padding: 40px;
+  }
+  
+  .main-content-row {
+    margin-bottom: 20px;
+  }
+  
+  .card {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .card-title {
+    margin-bottom: 20px;
+  }
+  
+  .footer {
+    background-color: #333333;
+    color: #FFFFFF;
+    padding: 10px 0;
+    text-align: center;
+  }
+  
+  .footer-col {
+    text-align: center;
+  }
+  

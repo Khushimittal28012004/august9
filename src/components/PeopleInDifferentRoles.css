@@ -1,0 +1,51 @@
+.roles-container {
+    padding: 0;
+    background-color: #F5F5F7;
+    min-height: 100vh;
+  }
+  
+  .header-row {
+    background-color: #333333;
+    padding: 10px 0;
+  }
+  
+  .header {
+    color: #FFFFFF;
+    text-align: center;
+  }
+  
+  .profiles-grid {
+    padding: 20px;
+  }
+  
+  .profile-card {
+    padding: 20px;
+  }
+  
+  .profile-card-inner {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .profile-picture {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #E0E0E0;
+    margin: 0 auto;
+  }
+  
+  .profile-details h3 {
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .see-all-button {
+    margin-top: 20px;
+    background-color: #28a745;
+    border: none;
+  }
+  
