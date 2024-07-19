@@ -1,10 +1,21 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/items';
+let apiBaseUrl = '';
+
+const getApiBaseUrl = async () => {
+  try {
+    const response = await axios.get('http://localhost:5009/current-port');
+    const { port } = response.data;
+    apiBaseUrl = `http://localhost:${port}`;
+  } catch (error) {
+    console.error('Error fetching API base URL:', error);
+  }
+};
 
 export const fetchItems = async () => {
+  if (!apiBaseUrl) await getApiBaseUrl();
   try {
-    const response = await axios.get(API_URL);
+    const response = await axios.get(`${apiBaseUrl}/items`);
     return response.data;
   } catch (error) {
     console.error('Error fetching items:', error);
@@ -13,8 +24,9 @@ export const fetchItems = async () => {
 };
 
 export const createItem = async (item) => {
+  if (!apiBaseUrl) await getApiBaseUrl();
   try {
-    const response = await axios.post(API_URL, item);
+    const response = await axios.post(`${apiBaseUrl}/items`, item);
     return response.data;
   } catch (error) {
     console.error('Error creating item:', error);

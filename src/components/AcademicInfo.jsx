@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
+import { getApiBaseUrl } from '../apiUtils';
 import './AcademicInfo.css';
 
 function AcademicInfo() {
@@ -10,15 +11,21 @@ function AcademicInfo() {
   const [customMajor, setCustomMajor] = useState('');
   const [graduationDate, setGraduationDate] = useState('');
   const [previousDegrees, setPreviousDegrees] = useState('');
-  const [email, setEmail] = useState(''); // Replace with user context or prop
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get the userId from location state
+  const { userId } = location.state || {};
+  console.log('UserId from state:', userId);
 
   useEffect(() => {
     const fetchAcademicInfo = async () => {
       try {
-        const response = await axios.get(`/academic-info/${email}`);
+        const apiBaseUrl = await getApiBaseUrl();
+        console.log('API Base URL:', apiBaseUrl);
+        const response = await axios.get(`${apiBaseUrl}/academic-info/${userId.trim()}`);
         const data = response.data;
 
         setDegreeProgram(data.degreeProgram || '');
@@ -34,10 +41,10 @@ function AcademicInfo() {
       }
     };
 
-    if (email) {
+    if (userId) {
       fetchAcademicInfo();
     }
-  }, [email]);
+  }, [userId]);
 
   const handleMajorChange = (e) => {
     const value = e.target.value;
@@ -54,14 +61,15 @@ function AcademicInfo() {
     }
 
     try {
-      await axios.post('/academic-info', {
-        email,
+      const apiBaseUrl = await getApiBaseUrl();
+      await axios.post(`${apiBaseUrl}/academic-info`, {
+        userId: userId.trim(),
         degreeProgram,
         major: major === 'Other' ? customMajor : major,
         graduationDate,
         previousDegrees
       });
-      navigate('/career-interests');
+      navigate('/career-interests', { state: { userId } });
     } catch (error) {
       console.error('Error saving academic info:', error);
       setError('Failed to save academic information.');

@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-// import { createItem } from '../api'; // Import API function
+import axios from 'axios';
 import './SignUp.css';
-import { createItem } from '../api'; // Correct relative path
-import { fetchItems } from '../api.js'; // Correct relative path
-
-
+import { getApiBaseUrl } from '../apiUtils.js'; // Import the utility function
 
 function SignUp() {
   const [firstName, setFirstName] = useState('');
@@ -23,16 +20,25 @@ function SignUp() {
       return;
     }
     
-    const newItem = {
-      name: `${firstName} ${lastName}`,
-      description: `Email: ${email}, Password: ${password}`
+    const newUser = {
+      firstName,
+      lastName,
+      email,
+      password
     };
 
-    const result = await createItem(newItem);
-    if (result) {
-      navigate('/academic-info');
-    } else {
-      alert('Failed to create item');
+    try {
+      const apiBaseUrl = await getApiBaseUrl(); // Fetch the dynamic API base URL
+      const response = await axios.post(`${apiBaseUrl}/signup`, newUser);
+      if (response.status === 201) {
+        console.log('User created with ID:', response.data.userId); // Log the userId
+        navigate('/academic-info', { state: { userId: response.data.userId } }); // Pass userId to academic-info page
+      } else {
+        alert('Failed to create user');
+      }
+    } catch (error) {
+      console.error('Error creating user:', error);
+      alert('Error creating user');
     }
   };
 
