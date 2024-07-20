@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 import './Login.css';
-// Remove the incorrect import
-// import { fetchItems, createItem } from 'khushim/src/api.js'; 
+import { getApiBaseUrl } from '../apiUtils'; // Import the utility function
 
 function Login() {
   const navigate = useNavigate();
@@ -17,9 +16,12 @@ function Login() {
     e.preventDefault();
     
     try {
-      const response = await axios.post('http://localhost:5000/login', { email, password });
+      const apiBaseUrl = await getApiBaseUrl(); // Fetch the dynamic API base URL
+      const response = await axios.post(`${apiBaseUrl}/login`, { email, password });
       if (response.status === 200) {
         navigate('/home'); // Corrected navigation path
+      } else {
+        setError('Login failed. Please check your credentials.');
       }
     } catch (err) {
       setError('Login failed. Please check your credentials.');

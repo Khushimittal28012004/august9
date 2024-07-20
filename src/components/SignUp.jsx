@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 import './SignUp.css';
-import { getApiBaseUrl } from '../apiUtils.js'; // Import the utility function
+import { getApiBaseUrl } from '../apiUtils.js';
 
 function SignUp() {
   const [firstName, setFirstName] = useState('');
@@ -11,7 +11,60 @@ function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [initialFormData, setInitialFormData] = useState({});
   const navigate = useNavigate();
+  const location = useLocation();
+  const { userId } = location.state || {};
+
+  useEffect(() => {
+    const loadFormData = () => {
+      const savedFormData = JSON.parse(localStorage.getItem('signupFormData'));
+      if (savedFormData) {
+        setFirstName(savedFormData.firstName || '');
+        setLastName(savedFormData.lastName || '');
+        setEmail(savedFormData.email || '');
+        setPassword(savedFormData.password || '');
+        setConfirmPassword(savedFormData.confirmPassword || '');
+        setInitialFormData(savedFormData);
+      }
+    };
+
+    const fetchUserData = async () => {
+      if (userId) {
+        try {
+          const apiBaseUrl = await getApiBaseUrl();
+          const response = await axios.get(`${apiBaseUrl}/signup/${userId}`);
+          const userData = response.data;
+          setFirstName(userData.firstName || '');
+          setLastName(userData.lastName || '');
+          setEmail(userData.email || '');
+          setPassword(userData.password || '');
+          setConfirmPassword(userData.password || '');
+          setInitialFormData(userData);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+
+    if (userId) {
+      fetchUserData();
+    } else {
+      loadFormData();
+    }
+  }, [userId]);
+
+  const saveFormData = useCallback(() => {
+    const formData = {
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword
+    };
+    localStorage.setItem('signupFormData', JSON.stringify(formData));
+  }, [firstName, lastName, email, password, confirmPassword]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,19 +80,51 @@ function SignUp() {
       password
     };
 
+    const hasFormChanged = () => {
+      return (
+        firstName !== initialFormData.firstName ||
+        lastName !== initialFormData.lastName ||
+        email !== initialFormData.email ||
+        password !== initialFormData.password
+      );
+    };
+
     try {
-      const apiBaseUrl = await getApiBaseUrl(); // Fetch the dynamic API base URL
-      const response = await axios.post(`${apiBaseUrl}/signup`, newUser);
-      if (response.status === 201) {
-        console.log('User created with ID:', response.data.userId); // Log the userId
-        navigate('/academic-info', { state: { userId: response.data.userId } }); // Pass userId to academic-info page
+      const apiBaseUrl = await getApiBaseUrl();
+      let response;
+      if (userId) {
+        if (hasFormChanged()) {
+          response = await axios.put(`${apiBaseUrl}/signup/${userId}`, newUser);
+        } else {
+          navigate('/academic-info', { state: { userId } });
+          return;
+        }
       } else {
-        alert('Failed to create user');
+        response = await axios.post(`${apiBaseUrl}/signup`, newUser);
+      }
+
+      if (response && (response.status === 201 || response.status === 200)) {
+        console.log('User processed with ID:', response.data.userId);
+        localStorage.removeItem('signupFormData');
+        navigate('/academic-info', { state: { userId: response.data.userId } });
+      } else {
+        navigate('/academic-info', { state: { userId } });
       }
     } catch (error) {
-      console.error('Error creating user:', error);
-      alert('Error creating user');
+      alert('Error processing user');
     }
+  };
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', saveFormData);
+    return () => {
+      window.removeEventListener('beforeunload', saveFormData);
+      saveFormData();
+    };
+  }, [saveFormData]);
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -83,13 +168,15 @@ function SignUp() {
 
               <Form.Group controlId="formPassword" className="signup-form-group position-relative">
                 <Form.Control
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   placeholder="Password"
                   className="signup-form-control"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <span className="signup-show-password">Show</span>
+                <span className="signup-show-password" onClick={toggleShowPassword}>
+                  {showPassword ? 'Hide' : 'Show'}
+                </span>
               </Form.Group>
               
               <Form.Group controlId="formConfirmPassword" className="signup-form-group">
