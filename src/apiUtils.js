@@ -6,7 +6,7 @@ let apiBaseUrl = '';
 export const getApiBaseUrl = async () => {
   if (!apiBaseUrl) {
     try {
-      const response = await axios.get('http://localhost:5009/current-port'); // Adjusted to your backend port
+      const response = await axios.get('http://localhost:5001/current-port'); // Adjusted to your backend port
       const { port } = response.data;
       apiBaseUrl = `http://localhost:${port}`;
     } catch (error) {
