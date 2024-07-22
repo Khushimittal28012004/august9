@@ -26,6 +26,7 @@ function App() {
         <Route path="/career-interests" element={<CareerInterests />} />
         <Route path="/previous-experience" element={<PreviousExperience />} />
         <Route path="/additional-info" element={<AdditionalInformation />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="/edit-profile" element={<EditProfilePage />} />

@@ -1,158 +1,114 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
-import axios from 'axios';
-import { getApiBaseUrl } from '../apiUtils';
 import './AcademicInfo.css';
 
 function AcademicInfo() {
-  const [degreeProgram, setDegreeProgram] = useState('');
-  const [major, setMajor] = useState('');
-  const [customMajor, setCustomMajor] = useState('');
-  const [graduationDate, setGraduationDate] = useState('');
-  const [previousDegrees, setPreviousDegrees] = useState('');
+  const [formData, setFormData] = useState({
+    degreeProgram: '',
+    major: '',
+    customMajor: '',
+    graduationDate: '',
+    previousDegrees: '',
+  });
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
 
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const sessionId = location.state?.sessionId || localStorage.getItem('sessionId');
-  const { userId } = location.state || {};
 
   useEffect(() => {
-    const loadFormData = () => {
-      const savedFormData = JSON.parse(localStorage.getItem(`${sessionId}-academicInfoFormData`));
-      if (savedFormData) {
-        setDegreeProgram(savedFormData.degreeProgram || '');
-        setMajor(savedFormData.major || '');
-        setCustomMajor(savedFormData.customMajor || '');
-        setGraduationDate(savedFormData.graduationDate || '');
-        setPreviousDegrees(savedFormData.previousDegrees || '');
-      }
-    };
+    const savedFormData = JSON.parse(localStorage.getItem('academicInfo'));
+    if (savedFormData) {
+      setFormData(savedFormData);
+    }
+  }, []);
 
-    const fetchAcademicInfo = async () => {
-      if (userId) {
-        try {
-          const apiBaseUrl = await getApiBaseUrl();
-          const response = await axios.get(`${apiBaseUrl}/academic-info/${userId}`);
-          const academicInfo = response.data;
-          setDegreeProgram(academicInfo.degreeProgram || '');
-          setMajor(academicInfo.major || '');
-          setCustomMajor(academicInfo.major === 'Other' ? academicInfo.customMajor : '');
-          setGraduationDate(academicInfo.graduationDate || '');
-          setPreviousDegrees(academicInfo.previousDegrees || '');
-        } catch (error) {
-          console.error('Error fetching academic info:', error);
-        }
-      } else {
-        loadFormData();
-      }
-    };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    const newFormData = { ...formData, [name]: value };
+    setFormData(newFormData);
+    localStorage.setItem('academicInfo', JSON.stringify(newFormData));
 
-    fetchAcademicInfo();
-  }, [userId, sessionId]);
+    if (newFormData.degreeProgram && newFormData.major && newFormData.graduationDate && newFormData.previousDegrees) {
+      setError('');
+    }
+  };
 
-  const saveFormData = useCallback(() => {
-    const formData = {
-      degreeProgram,
-      major,
-      customMajor,
-      graduationDate,
-      previousDegrees
-    };
-    localStorage.setItem(`${sessionId}-academicInfoFormData`, JSON.stringify(formData));
-  }, [degreeProgram, major, customMajor, graduationDate, previousDegrees, sessionId]);
-
-  useEffect(() => {
-    saveFormData();
-  }, [degreeProgram, major, customMajor, graduationDate, previousDegrees, saveFormData]);
-
-  const handleContinue = async (e) => {
+  const handleContinue = (e) => {
     e.preventDefault();
+    const { degreeProgram, graduationDate, previousDegrees } = formData;
 
     if (!degreeProgram || !graduationDate || !previousDegrees) {
       setError('Please fill in all required fields.');
       return;
     }
 
-    setLoading(true);
-
-    try {
-      const apiBaseUrl = await getApiBaseUrl();
-      await axios.post(`${apiBaseUrl}/academic-info`, {
-        userId: userId.trim(),
-        degreeProgram,
-        major: major === 'Other' ? customMajor : major,
-        graduationDate,
-        previousDegrees,
-      });
-      localStorage.removeItem(`${sessionId}-academicInfoFormData`);
-      navigate('/career-interests', { state: { userId, sessionId } });
-    } catch (error) {
-      console.error('Error saving academic info:', error);
-      setError('Failed to save academic information.');
-    } finally {
-      setLoading(false);
-    }
+    navigate('/career-interests');
   };
-
-  useEffect(() => {
-    window.addEventListener('beforeunload', saveFormData);
-    return () => {
-      window.removeEventListener('beforeunload', saveFormData);
-      saveFormData();
-    };
-  }, [saveFormData]);
 
   const handleMajorChange = (e) => {
     const value = e.target.value;
-    setMajor(value);
-    if (value !== 'Other') setCustomMajor('');
+    const newFormData = { ...formData, major: value, customMajor: value !== 'Other' ? '' : formData.customMajor };
+    setFormData(newFormData);
+    localStorage.setItem('academicInfo', JSON.stringify(newFormData));
+
+    if (newFormData.degreeProgram && newFormData.major && newFormData.graduationDate && newFormData.previousDegrees) {
+      setError('');
+    }
   };
 
-  if (loading) return <p>Loading...</p>;
+  const isFormValid = () => {
+    const { degreeProgram, major, customMajor, graduationDate, previousDegrees } = formData;
+    const isMajorValid = major && (major !== 'Other' || customMajor);
+    return degreeProgram && isMajorValid && graduationDate && previousDegrees;
+  };
+
+  const inputStyle = {
+    height: '40px',
+    width: '475px',
+    backgroundColor: '#FFFFFF',
+    border: '1px solid rgba(153, 153, 153, 0.97)',
+    borderRadius: '4px',
+    paddingLeft: '10px',
+    margin: 'auto',
+  };
+
+  const formGroupStyle = {
+    marginBottom: '20px',
+  };
+
+  const buttonStyle = {
+    backgroundColor: '#00BBF0',
+    border: 'none',
+    width: '475px',
+    height: '35px',
+    padding: '5px',
+    borderRadius: '10px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.4)',
+    color: '#ffffff',
+    fontWeight: 'bold',
+    marginTop: '20px',
+    cursor: isFormValid() ? 'pointer' : 'not-allowed',
+    opacity: isFormValid() ? 1 : 0.7,
+  };
 
   return (
-    <Container fluid style={{ background: '#F5F5F7', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <div style={{ position: 'absolute', top: '80px', left: '80px', fontSize: '24px', fontWeight: 'bold' }}>LOGO</div>
-      <Row className="justify-content-center align-items-center" style={{ width: '100%' }}>
+    <Container fluid className="academic-info-container">
+      <div className="logo" style={{ position: 'absolute', top: '80px', left: '80px', fontSize: '24px', fontWeight: 'bold' }}>LOGO</div>
+      <Row className="justify-content-center align-items-center" style={{ height: '100vh' }}>
         <Col md={6} className="d-flex justify-content-center">
-          <div style={{
-            background: '#FFFFFF',
-            padding: '40px',
-            borderRadius: '8px',
-            boxShadow: '0 4px 4px rgba(0, 0, 0, 0.25)',
-            maxWidth: '551px',
-            width: '100%',
-            margin: 'auto',
-            textAlign: 'center'
-          }}>
-            <h2 style={{
-              color: 'rgba(0, 0, 0, 0.5)',
-              marginBottom: '40px',
-              fontWeight: 'bold',
-              fontSize: '30px'
-            }}>Academic Information</h2>
+          <div className="academic-info-form">
+            <h2 className="academic-text">Academic Information</h2>
             {error && <Alert variant="danger">{error}</Alert>}
             <Form onSubmit={handleContinue}>
-              <Form.Group controlId="formDegreeProgram" style={{ marginBottom: '30px' }}>
+              <Form.Group controlId="formDegreeProgram" style={formGroupStyle}>
                 <Form.Control
                   as="select"
-                  value={degreeProgram}
-                  onChange={(e) => setDegreeProgram(e.target.value)}
+                  name="degreeProgram"
+                  value={formData.degreeProgram}
+                  onChange={handleChange}
                   className="form-select"
-                  style={{
-                    height: '40px',
-                    width: '475px',
-                    backgroundColor: '#FFFFFF',
-                    border: '1px solid rgba(153, 153, 153, 0.97)',
-                    borderRadius: '4px',
-                    paddingLeft: '10px',
-                    margin: 'auto',
-                  }}
+                  style={inputStyle}
                 >
                   <option value="" disabled hidden>Current Degree Program</option>
                   <option>Bachelor's</option>
@@ -160,27 +116,20 @@ function AcademicInfo() {
                 </Form.Control>
               </Form.Group>
 
-              <Form.Group controlId="formMajor" style={{ marginBottom: '30px', position: 'relative' }}>
-                {major === 'Other' ? (
+              <Form.Group controlId="formMajor" style={{ ...formGroupStyle, position: 'relative' }}>
+                {formData.major === 'Other' ? (
                   <div style={{ position: 'relative' }}>
                     <Form.Control
                       type="text"
                       placeholder="Please specify your major"
-                      value={customMajor}
-                      onChange={(e) => setCustomMajor(e.target.value)}
+                      name="customMajor"
+                      value={formData.customMajor}
+                      onChange={handleChange}
                       className="form-control"
-                      style={{
-                        height: '40px',
-                        width: '475px',
-                        backgroundColor: '#FFFFFF',
-                        border: '1px solid rgba(153, 153, 153, 0.97)',
-                        borderRadius: '4px',
-                        paddingLeft: '10px',
-                        margin: 'auto'
-                      }}
+                      style={inputStyle}
                     />
                     <span 
-                      onClick={() => setMajor('')} 
+                      onClick={() => handleMajorChange({ target: { value: '' }})}
                       onMouseEnter={() => setShowTooltip(true)}
                       onMouseLeave={() => setShowTooltip(false)}
                       style={{
@@ -224,18 +173,11 @@ function AcademicInfo() {
                 ) : (
                   <Form.Control
                     as="select"
-                    value={major}
+                    name="major"
+                    value={formData.major}
                     onChange={handleMajorChange}
                     className="form-select"
-                    style={{
-                      height: '40px',
-                      width: '475px',
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid rgba(153, 153, 153, 0.97)',
-                      borderRadius: '4px',
-                      paddingLeft: '10px',
-                      margin: 'auto',
-                    }}
+                    style={inputStyle}
                   >
                     <option value="" disabled hidden>Major</option>
                     <option>Computer Science</option>
@@ -246,57 +188,35 @@ function AcademicInfo() {
                 )}
               </Form.Group>
 
-              <Form.Group controlId="formGraduationDate" style={{ marginBottom: '30px' }}>
+              <Form.Group controlId="formGraduationDate" style={formGroupStyle}>
                 <Form.Control
                   type="text"
                   placeholder="Expected graduation date (e.g., May 2025)"
-                  value={graduationDate}
-                  onChange={(e) => setGraduationDate(e.target.value)}
-                  style={{
-                    height: '40px',
-                    width: '475px',
-                    backgroundColor: '#FFFFFF',
-                    border: '1px solid rgba(153, 153, 153, 0.97)',
-                    borderRadius: '4px',
-                    paddingLeft: '10px',
-                    margin: 'auto'
-                  }}
+                  name="graduationDate"
+                  value={formData.graduationDate}
+                  onChange={handleChange}
+                  className="form-control"
+                  style={inputStyle}
                 />
               </Form.Group>
 
-              <Form.Group controlId="formPreviousDegrees" style={{ marginBottom: '30px' }}>
+              <Form.Group controlId="formPreviousDegrees" style={formGroupStyle}>
                 <Form.Control
                   type="text"
                   placeholder="Previous Degree(s)"
-                  value={previousDegrees}
-                  onChange={(e) => setPreviousDegrees(e.target.value)}
-                  style={{
-                    height: '40px',
-                    width: '475px',
-                    backgroundColor: '#FFFFFF',
-                    border: '1px solid rgba(153, 153, 153, 0.97)',
-                    borderRadius: '4px',
-                    paddingLeft: '10px',
-                    margin: 'auto'
-                  }}
+                  name="previousDegrees"
+                  value={formData.previousDegrees}
+                  onChange={handleChange}
+                  className="form-control"
+                  style={inputStyle}
                 />
               </Form.Group>
 
               <Button
                 variant="primary"
                 type="submit"
-                style={{
-                  backgroundColor: '#00BBF0',
-                  border: 'none',
-                  width: '475px',
-                  height: '35px',
-                  padding: '5px',
-                  borderRadius: '10px',
-                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.4)',
-                  color: '#ffffff',
-                  fontWeight: 'bold',
-                  margin: 'auto'
-                }}
+                className={`continue-btn button-with-shadow ${isFormValid() ? 'valid' : 'invalid'}`}
+                style={buttonStyle}
               >
                 Continue
               </Button>

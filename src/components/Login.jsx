@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 import './Login.css';
-import { getApiBaseUrl } from '../apiUtils'; // Import the utility function
+import { getApiBaseUrl } from '../apiUtils.js'; // Import the utility function
 
 function Login() {
   const navigate = useNavigate();

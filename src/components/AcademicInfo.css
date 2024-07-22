@@ -11,6 +11,7 @@
   max-width: 551px;
   width: 100%;
   margin: auto;
+  text-align: center; /* Center text within the form */
 }
 
 .academic-text {
@@ -21,7 +22,7 @@
   font-size: 30px;
 }
 
-.form-control {
+.form-control, .form-select {
   width: 100%;
   height: 40px;
   background-color: #FFFFFF;
@@ -32,16 +33,15 @@
   color: rgba(0, 0, 0, 0.5); /* consistent font color */
 }
 
-.form-control:focus {
+.form-control:focus, .form-select:focus {
   color: #000000; /* black color on focus */
 }
 
-.form-control option {
+.form-control option, .form-select option {
   color: #000000; /* black color for selected option */
 }
 
 .continue-btn {
-  background-color: #00BBF0 !important;
   border: none !important;
   margin-top: 20px;
   width: 100%;
@@ -51,6 +51,19 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4) !important;
   color: #ffffff !important;
   font-weight: bold !important;
+  background-color: #00BBF0 !important;
+  outline: none !important; /* Remove focus outline */
+}
+
+.continue-btn.valid {
+  background-color: #00BBF0 !important;
+  cursor: pointer !important;
+}
+
+.continue-btn.invalid {
+  background-color: #00BBF0 !important; /* Light blue color */
+  opacity: 0.7 !important; /* Set opacity to 50% */
+  cursor: not-allowed !important;
 }
 
 .button-with-shadow {

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Form, Button, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Modal, Alert } from 'react-bootstrap';
 import './AdditionalInformation.css';
-import { createItem } from '../api'; // Correctly import createItem function
+import { createItem } from '../api.js';
 
 function AdditionalInformation() {
   const [linkedin, setLinkedin] = useState('');
@@ -12,6 +12,34 @@ function AdditionalInformation() {
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedFormData = JSON.parse(localStorage.getItem('additionalInformation'));
+    if (savedFormData) {
+      setLinkedin(savedFormData.linkedin || '');
+      setPortfolio(savedFormData.portfolio || '');
+      setHobbies(savedFormData.hobbies || '');
+      setAgreement(savedFormData.agreement || false);
+    }
+  }, []);
+
+  const handleChange = (setter, key) => (e) => {
+    const { value, type, checked } = e.target;
+    const newValue = type === 'checkbox' ? checked : value;
+    setter(newValue);
+
+    const formData = {
+      linkedin: key === 'linkedin' ? newValue : linkedin,
+      portfolio: key === 'portfolio' ? newValue : portfolio,
+      hobbies: key === 'hobbies' ? newValue : hobbies,
+      agreement: key === 'agreement' ? newValue : agreement,
+    };
+    localStorage.setItem('additionalInformation', JSON.stringify(formData));
+
+    if (formData.linkedin && formData.portfolio && formData.hobbies && formData.agreement) {
+      setError('');
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,18 +53,70 @@ function AdditionalInformation() {
       return;
     }
 
+    // Retrieve data from local storage
+    const signUpData = JSON.parse(localStorage.getItem('formData')) || {};
+    const academicInfo = JSON.parse(localStorage.getItem('academicInfo')) || {};
+    const careerInterests = JSON.parse(localStorage.getItem('careerInterests')) || {};
+    const previousExperience = JSON.parse(localStorage.getItem('previousExperience')) || {};
+
+    // Combine all data
+    const combinedData = {
+      ...signUpData,
+      ...academicInfo,
+      ...careerInterests,
+      ...previousExperience,
+      linkedin,
+      portfolio,
+      hobbies,
+    };
+
     try {
-      await createItem({ linkedin, portfolio, hobbies });
+      await createItem(combinedData);
       setShowModal(true);
     } catch (error) {
       console.error('Error submitting additional information:', error);
-      setError('Failed to submit information.');
+      if (error.response && error.response.data && error.response.data.message === 'Email already exists') {
+        setError('Email already exists. Please use a different email.');
+      } else {
+        setError('Failed to submit information.');
+      }
     }
   };
 
   const handleOkClick = () => {
     setShowModal(false);
     navigate('/login'); // Redirect to the login page
+  };
+
+  const isFormValid = linkedin && portfolio && hobbies && agreement;
+
+  const inputStyle = {
+    height: '40px',
+    width: '475px',
+    backgroundColor: '#FFFFFF',
+    border: '1px solid rgba(153, 153, 153, 0.97)',
+    borderRadius: '4px',
+    paddingLeft: '10px',
+    margin: 'auto',
+  };
+
+  const formGroupStyle = {
+    marginBottom: '20px',
+  };
+
+  const buttonStyle = {
+    backgroundColor: '#00BBF0',
+    border: 'none',
+    width: '475px',
+    height: '35px',
+    padding: '5px',
+    borderRadius: '10px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.4)',
+    color: '#ffffff',
+    fontWeight: 'bold',
+    marginTop: '20px',
+    cursor: isFormValid ? 'pointer' : 'not-allowed',
+    opacity: isFormValid ? 1 : 0.7,
   };
 
   return (
@@ -46,41 +126,41 @@ function AdditionalInformation() {
         <Col md={6} className="d-flex justify-content-center">
           <div style={{ background: '#FFFFFF', padding: '40px', borderRadius: '8px', boxShadow: '0 4px 4px rgba(0, 0, 0, 0.25)', maxWidth: '551px', width: '100%', margin: 'auto' }}>
             <h2 style={{ color: 'rgba(0, 0, 0, 0.5)', marginBottom: '40px', textAlign: 'center', fontWeight: 'bold', fontSize: '30px' }}>Additional Information</h2>
-            {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+            {error && <Alert variant="danger">{error}</Alert>}
             <Form onSubmit={handleSubmit}>
-              <Form.Group controlId="formLinkedin">
+              <Form.Group controlId="formLinkedin" style={formGroupStyle}>
                 <Form.Control
                   type="text"
                   placeholder="LinkedIn"
                   value={linkedin}
-                  onChange={(e) => setLinkedin(e.target.value)}
-                  style={{ marginBottom: '20px' }}
+                  onChange={handleChange(setLinkedin, 'linkedin')}
+                  style={inputStyle}
                 />
               </Form.Group>
-              <Form.Group controlId="formPortfolio">
+              <Form.Group controlId="formPortfolio" style={formGroupStyle}>
                 <Form.Control
                   type="text"
                   placeholder="Portfolio/Personal Website"
                   value={portfolio}
-                  onChange={(e) => setPortfolio(e.target.value)}
-                  style={{ marginBottom: '20px' }}
+                  onChange={handleChange(setPortfolio, 'portfolio')}
+                  style={inputStyle}
                 />
               </Form.Group>
-              <Form.Group controlId="formHobbies">
+              <Form.Group controlId="formHobbies" style={formGroupStyle}>
                 <Form.Control
                   type="text"
                   placeholder="Hobbies and Interests"
                   value={hobbies}
-                  onChange={(e) => setHobbies(e.target.value)}
-                  style={{ marginBottom: '20px' }}
+                  onChange={handleChange(setHobbies, 'hobbies')}
+                  style={inputStyle}
                 />
               </Form.Group>
-              <p style={{ textAlign: 'left', color: 'black', marginBottom: '20px' }}>Review all entered information</p>
+              <p style={{ textAlign: 'left', color: 'black', marginBottom: '20px' }}></p>
               <Form.Group controlId="formAgreement" className="d-flex align-items-center" style={{ marginBottom: '20px' }}>
                 <input
                   type="checkbox"
                   checked={agreement}
-                  onChange={(e) => setAgreement(e.target.checked)}
+                  onChange={handleChange(setAgreement, 'agreement')}
                   style={{ marginRight: '10px' }}
                 />
                 <label style={{ color: 'black' }}>
@@ -91,8 +171,8 @@ function AdditionalInformation() {
                 <Button
                   variant="primary"
                   type="submit"
-                  disabled={!agreement}
-                  style={{ backgroundColor: '#00BBF0', border: 'none', width: '150px', height: '35px', padding: '5px', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.4)', color: '#ffffff', fontWeight: 'bold' }}
+                  className={`continue-btn button-with-shadow ${isFormValid ? 'valid' : 'invalid'}`}
+                  style={buttonStyle}
                 >
                   Submit
                 </Button>

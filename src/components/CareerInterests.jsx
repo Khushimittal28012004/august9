@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import CreatableSelect from 'react-select/creatable';
-import axios from 'axios';
 import './CareerInterests.css';
-// import {createitem } from 'khushim/src/api.js';
 
 const customStyles = {
-  control: (provided, state) => ({
+  control: (provided) => ({
     ...provided,
     minHeight: '40px',
     border: '1px solid rgba(153, 153, 153, 0.97)',
@@ -15,11 +13,8 @@ const customStyles = {
     marginBottom: '20px',
     paddingLeft: '1px',
     backgroundColor: '#FFFFFF',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap', 
-    textOverflow: 'ellipsis',
   }),
-  valueContainer: (provided, state) => ({
+  valueContainer: (provided) => ({
     ...provided,
     flexWrap: 'wrap',
     overflow: 'auto',
@@ -88,67 +83,105 @@ function CareerInterests() {
   const [selectedIndustries, setSelectedIndustries] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [jobLocations, setJobLocations] = useState('');
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
 
   const navigate = useNavigate();
-  const userEmail = 'user@example.com'; // Replace with actual user email from authentication context or state
 
   useEffect(() => {
-    const fetchCareerInterests = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/career-interests/${userEmail}`);
-        const { roles, industries, skills, jobLocations } = response.data || {};
-        setSelectedRoles(roles?.map(role => ({ value: role, label: role })) || []);
-        setSelectedIndustries(industries?.map(industry => ({ value: industry, label: industry })) || []);
-        setSelectedSkills(skills?.map(skill => ({ value: skill, label: skill })) || []);
-        setJobLocations(jobLocations || '');
-      } catch (error) {
-        console.error('Error fetching career interests:', error);
-        setError('Failed to fetch career interests.');
-      }
+    const savedFormData = JSON.parse(localStorage.getItem('careerInterests'));
+    if (savedFormData) {
+      setSelectedRoles(savedFormData.selectedRoles || []);
+      setSelectedIndustries(savedFormData.selectedIndustries || []);
+      setSelectedSkills(savedFormData.selectedSkills || []);
+      setJobLocations(savedFormData.jobLocations || '');
+    }
+  }, []);
+
+  const saveFormDataToLocalStorage = (updatedFormData) => {
+    const formData = {
+      selectedRoles,
+      selectedIndustries,
+      selectedSkills,
+      jobLocations,
+      ...updatedFormData,
     };
+    localStorage.setItem('careerInterests', JSON.stringify(formData));
+  };
 
-    fetchCareerInterests();
-  }, [userEmail]);
+  const handleChangeRoles = (value) => {
+    setSelectedRoles(value);
+    saveFormDataToLocalStorage({ selectedRoles: value });
 
-  const handleContinue = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post('http://localhost:5000/career-interests', {
-        email: userEmail,
-        roles: selectedRoles.map(role => role.value),
-        industries: selectedIndustries.map(industry => industry.value),
-        skills: selectedSkills.map(skill => skill.value),
-        jobLocations
-      });
-      navigate('/previous-experience');
-    } catch (error) {
-      console.error('Error saving career interests:', error);
-      setError('Failed to save career interests.');
+    if (value.length > 0 && selectedIndustries.length > 0 && selectedSkills.length > 0 && jobLocations) {
+      setError('');
+    }
+  };
+
+  const handleChangeIndustries = (value) => {
+    setSelectedIndustries(value);
+    saveFormDataToLocalStorage({ selectedIndustries: value });
+
+    if (selectedRoles.length > 0 && value.length > 0 && selectedSkills.length > 0 && jobLocations) {
+      setError('');
+    }
+  };
+
+  const handleChangeSkills = (value) => {
+    setSelectedSkills(value);
+    saveFormDataToLocalStorage({ selectedSkills: value });
+
+    if (selectedRoles.length > 0 && selectedIndustries.length > 0 && value.length > 0 && jobLocations) {
+      setError('');
+    }
+  };
+
+  const handleJobLocationsChange = (e) => {
+    const { value } = e.target;
+    setJobLocations(value);
+    saveFormDataToLocalStorage({ jobLocations: value });
+
+    if (selectedRoles.length > 0 && selectedIndustries.length > 0 && selectedSkills.length > 0 && value) {
+      setError('');
     }
   };
 
   const handleCreateOption = (inputValue, setOptions, setSelected) => {
     const newOption = { value: inputValue, label: inputValue };
-    setOptions(prev => [...prev, newOption]);
-    setSelected(prev => [...prev, newOption]);
+    setOptions((prev) => [...prev, newOption]);
+    setSelected((prev) => [...prev, newOption]);
+    saveFormDataToLocalStorage();
+
+    if (selectedRoles.length > 0 && selectedIndustries.length > 0 && selectedSkills.length > 0 && jobLocations) {
+      setError('');
+    }
   };
 
+  const handleContinue = (e) => {
+    e.preventDefault();
+    if (selectedRoles.length > 0 && selectedIndustries.length > 0 && selectedSkills.length > 0 && jobLocations) {
+      navigate('/previous-experience');
+    } else {
+      setError('Please fill in all required fields to continue.');
+    }
+  };
+
+  const isFormValid = selectedRoles.length > 0 && selectedIndustries.length > 0 && selectedSkills.length > 0 && jobLocations;
+
   return (
-    <Container fluid style={{ background: '#F5F5F7', height: '100vh' }}>
-      <div style={{ position: 'absolute', top: '80px', left: '80px', fontSize: '24px', fontWeight: 'bold' }}>LOGO</div>
+    <Container fluid className="career-interests-container">
+      <div className="logo">LOGO</div>
       <Row className="justify-content-center align-items-center vh-100">
         <Col md={6} className="d-flex justify-content-center">
-          <div style={{ background: '#FFFFFF', padding: '40px', borderRadius: '8px', boxShadow: '0 4px 4px rgba(0, 0, 0, 0.25)', maxWidth: '551px', width: '100%', margin: 'auto' }}>
-            <h2 style={{ color: 'rgba(0, 0, 0, 0.5)', marginBottom: '40px', textAlign: 'center', fontWeight: 'bold', fontSize: '30px' }}>Career Interests</h2>
-            {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+          <div className="career-interests-form">
+            <h2 className="welcome-text">Career Interests</h2>
+            {error && <Alert variant="danger">{error}</Alert>}
             <Form onSubmit={handleContinue}>
               <Form.Group controlId="formJobRoles">
                 <CreatableSelect
                   isMulti
                   options={roleOptions}
                   value={selectedRoles}
-                  onChange={setSelectedRoles}
+                  onChange={handleChangeRoles}
                   onCreateOption={(inputValue) => handleCreateOption(inputValue, setRoleOptions, setSelectedRoles)}
                   styles={customStyles}
                   placeholder="Preferred Job Roles"
@@ -160,7 +193,7 @@ function CareerInterests() {
                   isMulti
                   options={industryOptions}
                   value={selectedIndustries}
-                  onChange={setSelectedIndustries}
+                  onChange={handleChangeIndustries}
                   onCreateOption={(inputValue) => handleCreateOption(inputValue, setIndustryOptions, setSelectedIndustries)}
                   styles={customStyles}
                   placeholder="Industries of Interest"
@@ -172,7 +205,7 @@ function CareerInterests() {
                   isMulti
                   options={skillsOptions}
                   value={selectedSkills}
-                  onChange={setSelectedSkills}
+                  onChange={handleChangeSkills}
                   onCreateOption={(inputValue) => handleCreateOption(inputValue, setSkillsOptions, setSelectedSkills)}
                   styles={customStyles}
                   placeholder="Skills"
@@ -185,7 +218,7 @@ function CareerInterests() {
                   placeholder="Preferred Job Locations"
                   className="form-control"
                   value={jobLocations}
-                  onChange={(e) => setJobLocations(e.target.value)}
+                  onChange={handleJobLocationsChange}
                   style={{ color: jobLocations ? '#000000' : 'rgba(0, 0, 0, 0.5)', backgroundColor: '#FFFFFF', border: '1px solid rgba(153, 153, 153, 0.97)', borderRadius: '4px', marginBottom: '20px', paddingLeft: '10px' }}
                 />
               </Form.Group>
@@ -193,9 +226,9 @@ function CareerInterests() {
               <Button
                 variant="primary"
                 type="submit"
-                className="continue-btn button-with-shadow"
+                className={`continue-btn button-with-shadow ${isFormValid ? 'valid' : 'invalid'}`}
                 block
-                style={{ backgroundColor: '#00BBF0', border: 'none', marginTop: '20px', width: '100%', height: '35px', padding: '5px', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.4)', color: '#ffffff', fontWeight: 'bold' }}
+                style={{ opacity: isFormValid ? 1 : 0.7 }}
               >
                 Continue
               </Button>

@@ -1,130 +1,117 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import './SignUp.css';
-import { getApiBaseUrl } from '../apiUtils.js';
 
 function SignUp() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [otp, setOtp] = useState('');
+  const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [initialFormData, setInitialFormData] = useState({});
+
   const navigate = useNavigate();
-  const location = useLocation();
-  const { userId } = location.state || {};
 
   useEffect(() => {
-    const loadFormData = () => {
-      const savedFormData = JSON.parse(localStorage.getItem('signupFormData'));
-      if (savedFormData) {
-        setFirstName(savedFormData.firstName || '');
-        setLastName(savedFormData.lastName || '');
-        setEmail(savedFormData.email || '');
-        setPassword(savedFormData.password || '');
-        setConfirmPassword(savedFormData.confirmPassword || '');
-        setInitialFormData(savedFormData);
-      }
-    };
-
-    const fetchUserData = async () => {
-      if (userId) {
-        try {
-          const apiBaseUrl = await getApiBaseUrl();
-          const response = await axios.get(`${apiBaseUrl}/signup/${userId}`);
-          const userData = response.data;
-          setFirstName(userData.firstName || '');
-          setLastName(userData.lastName || '');
-          setEmail(userData.email || '');
-          setPassword(userData.password || '');
-          setConfirmPassword(userData.password || '');
-          setInitialFormData(userData);
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        }
-      }
-    };
-
-    if (userId) {
-      fetchUserData();
-    } else {
-      loadFormData();
+    const savedFormData = JSON.parse(localStorage.getItem('formData'));
+    if (savedFormData) {
+      setFormData(savedFormData);
     }
-  }, [userId]);
+  }, []);
 
-  const saveFormData = useCallback(() => {
-    const formData = {
-      firstName,
-      lastName,
-      email,
-      password,
-      confirmPassword
-    };
-    localStorage.setItem('signupFormData', JSON.stringify(formData));
-  }, [firstName, lastName, email, password, confirmPassword]);
+  const handleChange = (e) => {
+    const newFormData = { ...formData, [e.target.name]: e.target.value };
+    setFormData(newFormData);
+    localStorage.setItem('formData', JSON.stringify(newFormData));
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      alert('Passwords do not match');
-      return;
-    }
-    
-    const newUser = {
-      firstName,
-      lastName,
-      email,
-      password
-    };
-
-    const hasFormChanged = () => {
-      return (
-        firstName !== initialFormData.firstName ||
-        lastName !== initialFormData.lastName ||
-        email !== initialFormData.email ||
-        password !== initialFormData.password
-      );
-    };
-
-    try {
-      const apiBaseUrl = await getApiBaseUrl();
-      let response;
-      if (userId) {
-        if (hasFormChanged()) {
-          response = await axios.put(`${apiBaseUrl}/signup/${userId}`, newUser);
-        } else {
-          navigate('/academic-info', { state: { userId } });
-          return;
-        }
-      } else {
-        response = await axios.post(`${apiBaseUrl}/signup`, newUser);
-      }
-
-      if (response && (response.status === 201 || response.status === 200)) {
-        console.log('User processed with ID:', response.data.userId);
-        localStorage.removeItem('signupFormData');
-        navigate('/academic-info', { state: { userId: response.data.userId } });
-      } else {
-        navigate('/academic-info', { state: { userId } });
-      }
-    } catch (error) {
-      alert('Error processing user');
+    const { firstName, lastName, email, password, confirmPassword } = newFormData;
+    if (firstName && lastName && email && password && confirmPassword && password === confirmPassword) {
+      setError('');
     }
   };
 
-  useEffect(() => {
-    window.addEventListener('beforeunload', saveFormData);
-    return () => {
-      window.removeEventListener('beforeunload', saveFormData);
-      saveFormData();
-    };
-  }, [saveFormData]);
+  const handleOtpChange = (e) => {
+    setOtp(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { firstName, lastName, email, password, confirmPassword } = formData;
+
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
+      setError('Please fill in all required fields.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    setError(''); // Clear error message on successful validation
+    navigate('/academic-info');
+  };
+
+  const handleGetOtp = () => {
+    // Add logic to request OTP here
+    console.log("OTP requested for email:", formData.email);
+  };
+
+  const isFormValid = () => {
+    const { firstName, lastName, email, password, confirmPassword } = formData;
+    const isPasswordMatch = password === confirmPassword;
+    return firstName && lastName && email && password && confirmPassword && isPasswordMatch;
+  };
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
+  };
+
+  const inputStyle = {
+    height: '40px',
+    width: '475px',
+    backgroundColor: '#FFFFFF',
+    border: '1px solid rgba(153, 153, 153, 0.97)',
+    borderRadius: '4px',
+    paddingLeft: '10px',
+    margin: 'auto',
+  };
+
+  const formGroupStyle = {
+    marginBottom: '20px',
+  };
+
+  const buttonStyle = {
+    backgroundColor: isFormValid() ? '#00BBF0' : '#cccccc',
+    border: 'none',
+    width: '475px',
+    height: '35px',
+    padding: '5px',
+    borderRadius: '10px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.4)',
+    color: '#ffffff',
+    fontWeight: 'bold',
+    marginTop: '20px',
+    cursor: isFormValid() ? 'pointer' : 'not-allowed',
+    opacity: isFormValid() ? 1 : 0.7,
+  };
+
+  const otpButtonStyle = {
+    position: 'absolute',
+    right: '10px',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    backgroundColor: 'transparent',
+    border: 'none',
+    color: '#00BBF0',
+    cursor: 'pointer',
+    padding: '0',
+    fontSize: '14px',
   };
 
   return (
@@ -134,65 +121,96 @@ function SignUp() {
         <Col md={6} className="d-flex justify-content-center">
           <div className="signup-form">
             <h2 className="signup-welcome-text">Welcome to Rolync</h2>
+            {error && <Alert variant="danger">{error}</Alert>}
             <Form onSubmit={handleSubmit}>
-              <Form.Group controlId="formFirstName" className="signup-form-group">
+              <Form.Group controlId="formFirstName" className="signup-form-group" style={formGroupStyle}>
                 <Form.Control
                   type="text"
                   placeholder="First Name"
                   className="signup-form-control"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  style={inputStyle}
                 />
               </Form.Group>
               
-              <Form.Group controlId="formLastName" className="signup-form-group">
+              <Form.Group controlId="formLastName" className="signup-form-group" style={formGroupStyle}>
                 <Form.Control
                   type="text"
                   placeholder="Last Name"
                   className="signup-form-control"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  style={inputStyle}
                 />
               </Form.Group>
 
-              <Form.Group controlId="formEmail" className="signup-form-group position-relative">
+              <Form.Group controlId="formEmail" className="signup-form-group position-relative" style={formGroupStyle}>
                 <Form.Control
                   type="email"
                   placeholder="Email Address"
                   className="signup-form-control"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  style={inputStyle}
                 />
                 <span className="signup-note">*Use UTD email address</span>
               </Form.Group>
 
-              <Form.Group controlId="formPassword" className="signup-form-group position-relative">
+              <Form.Group controlId="formOtp" className="signup-form-group position-relative" style={formGroupStyle}>
+                <Form.Control
+                  type="text"
+                  placeholder="Verify your email address"
+                  className="signup-form-control"
+                  name="otp"
+                  value={otp}
+                  onChange={handleOtpChange}
+                  style={{ ...inputStyle, paddingRight: '100px' }}
+                />
+                <button
+                  type="button"
+                  onClick={handleGetOtp}
+                  style={otpButtonStyle}
+                >
+                  Get OTP
+                </button>
+              </Form.Group>
+
+              <Form.Group controlId="formPassword" className="signup-form-group position-relative" style={formGroupStyle}>
                 <Form.Control
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Password"
                   className="signup-form-control"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  style={inputStyle}
                 />
                 <span className="signup-show-password" onClick={toggleShowPassword}>
                   {showPassword ? 'Hide' : 'Show'}
                 </span>
               </Form.Group>
               
-              <Form.Group controlId="formConfirmPassword" className="signup-form-group">
+              <Form.Group controlId="formConfirmPassword" className="signup-form-group" style={formGroupStyle}>
                 <Form.Control
                   type="password"
                   placeholder="Confirm Password"
                   className="signup-form-control"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  style={inputStyle}
                 />
               </Form.Group>
 
               <Button
                 variant="primary"
                 type="submit"
-                className="signup-continue-btn button-with-shadow"
+                className={`signup-continue-btn button-with-shadow`}
+                style={buttonStyle}
                 block
               >
                 Continue

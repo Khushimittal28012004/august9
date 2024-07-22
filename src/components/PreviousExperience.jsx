@@ -1,30 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import { fetchItems } from '../api'; // Import API function
+import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import './PreviousExperience.css';
-// import { fetchItems, createItem } from 'khushim/src/api.js';
 
 function PreviousExperience() {
   const [experience, setExperience] = useState('');
   const [employmentTitle, setEmploymentTitle] = useState('');
-  const [items, setItems] = useState([]);
+  const [error, setError] = useState('');
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loadItems = async () => {
-      const fetchedItems = await fetchItems();
-      setItems(fetchedItems);
-    };
-
-    loadItems();
+    const savedFormData = JSON.parse(localStorage.getItem('previousExperience'));
+    if (savedFormData) {
+      setExperience(savedFormData.experience || '');
+      setEmploymentTitle(savedFormData.employmentTitle || '');
+    }
   }, []);
 
-  const handleContinue = (e) => {
-    e.preventDefault();
-    navigate('/AdditionalInformation.jsx'); // Adjust this to navigate to the correct next page
+  const handleChange = (setter, key) => (e) => {
+    const { value } = e.target;
+    setter(value);
+
+    const formData = {
+      experience: key === 'experience' ? value : experience,
+      employmentTitle: key === 'employmentTitle' ? value : employmentTitle,
+    };
+    localStorage.setItem('previousExperience', JSON.stringify(formData));
+
+    if (formData.experience && formData.employmentTitle) {
+      setError('');
+    }
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (experience && employmentTitle) {
+      navigate('/additional-info');
+    } else {
+      setError('Please fill in all required fields to continue.');
+    }
+  };
+
+  const isFormValid = experience && employmentTitle;
 
   return (
     <Container fluid style={{ background: '#F5F5F7', height: '100vh' }}>
@@ -33,23 +51,24 @@ function PreviousExperience() {
         <Col md={6} className="d-flex justify-content-center">
           <div style={{ background: '#FFFFFF', padding: '40px', borderRadius: '8px', boxShadow: '0 4px 4px rgba(0, 0, 0, 0.25)', maxWidth: '551px', width: '100%', margin: 'auto' }}>
             <h2 style={{ color: 'rgba(0, 0, 0, 0.5)', marginBottom: '40px', textAlign: 'center', fontWeight: 'bold', fontSize: '30px' }}>Previous Experience</h2>
-            <Form onSubmit={handleContinue}>
+            {error && <Alert variant="danger">{error}</Alert>}
+            <Form onSubmit={handleSubmit}>
               <Form.Group controlId="formExperience">
                 <Form.Control
                   type="text"
                   placeholder="Total Experience (Years and months)"
                   className="form-control"
                   value={experience}
-                  onChange={(e) => setExperience(e.target.value)}
-                  style={{ 
-                    width: '475px', 
-                    height: '40px', 
-                    backgroundColor: '#FFFFFF', 
-                    border: '1px solid rgba(153, 153, 153, 0.97)', 
-                    borderRadius: '4px', 
-                    marginBottom: '20px', 
-                    paddingLeft: '10px', 
-                    color: experience ? '#000000' : 'rgba(0, 0, 0, 0.5)' 
+                  onChange={handleChange(setExperience, 'experience')}
+                  style={{
+                    width: '475px',
+                    height: '40px',
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid rgba(153, 153, 153, 0.97)',
+                    borderRadius: '4px',
+                    marginBottom: '20px',
+                    paddingLeft: '10px',
+                    color: experience ? '#000000' : 'rgba(0, 0, 0, 0.5)'
                   }}
                 />
               </Form.Group>
@@ -60,16 +79,16 @@ function PreviousExperience() {
                   placeholder="Previous Employment Title"
                   className="form-control"
                   value={employmentTitle}
-                  onChange={(e) => setEmploymentTitle(e.target.value)}
-                  style={{ 
-                    width: '475px', 
-                    height: '40px', 
-                    backgroundColor: '#FFFFFF', 
-                    border: '1px solid rgba(153, 153, 153, 0.97)', 
-                    borderRadius: '4px', 
-                    marginBottom: '20px', 
-                    paddingLeft: '10px', 
-                    color: employmentTitle ? '#000000' : 'rgba(0, 0, 0, 0.5)' 
+                  onChange={handleChange(setEmploymentTitle, 'employmentTitle')}
+                  style={{
+                    width: '475px',
+                    height: '40px',
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid rgba(153, 153, 153, 0.97)',
+                    borderRadius: '4px',
+                    marginBottom: '20px',
+                    paddingLeft: '10px',
+                    color: employmentTitle ? '#000000' : 'rgba(0, 0, 0, 0.5)'
                   }}
                 />
               </Form.Group>
@@ -77,9 +96,8 @@ function PreviousExperience() {
               <Button
                 variant="primary"
                 type="submit"
-                className="continue-btn button-with-shadow"
+                className={`continue-btn button-with-shadow ${isFormValid ? 'valid' : 'invalid'}`}
                 block
-                style={{ backgroundColor: '#00BBF0', border: 'none', marginTop: '20px', width: '475px', height: '35px', padding: '5px', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.4)', color: '#ffffff', fontWeight: 'bold' }}
               >
                 Continue
               </Button>
