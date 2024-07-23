@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
+import axios from 'axios';
+// import { getApiBaseUrl } from '../apiUtils.js';
 import './SignUp.css';
 
 function SignUp() {
@@ -14,6 +16,7 @@ function SignUp() {
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [otpMessage, setOtpMessage] = useState('');
 
   const navigate = useNavigate();
 
@@ -53,15 +56,29 @@ function SignUp() {
       return;
     }
 
-    setError(''); // Clear error message on successful validation
+    setError('');
     navigate('/academic-info');
   };
 
-  const handleGetOtp = () => {
-    // Add logic to request OTP here
-    console.log("OTP requested for email:", formData.email);
+  const handleGetOtp = async () => {
+    try {
+      // const apiBaseUrl = await getApiBaseUrl();
+      const url = `http://localhost:5001/api/send-otp`;
+      // console.log('Request URL:', url);
+      const response = await axios.post(url, { email: formData.email });
+      console.log('Response:', response);
+      setOtpMessage(response.data.message);
+    } catch (error) {
+      console.error('Error sending OTP:', error);
+      if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+        console.error('Response headers:', error.response.headers);
+      }
+      setOtpMessage('Error sending OTP');
+    }
   };
-
+  
   const isFormValid = () => {
     const { firstName, lastName, email, password, confirmPassword } = formData;
     const isPasswordMatch = password === confirmPassword;
@@ -112,6 +129,7 @@ function SignUp() {
     cursor: 'pointer',
     padding: '0',
     fontSize: '14px',
+    fontWeight: 'bold',
   };
 
   return (
@@ -122,6 +140,7 @@ function SignUp() {
           <div className="signup-form">
             <h2 className="signup-welcome-text">Welcome to Rolync</h2>
             {error && <Alert variant="danger">{error}</Alert>}
+            {otpMessage && <Alert variant={otpMessage === 'OTP sent successfully' ? 'success' : 'danger'}>{otpMessage}</Alert>}
             <Form onSubmit={handleSubmit}>
               <Form.Group controlId="formFirstName" className="signup-form-group" style={formGroupStyle}>
                 <Form.Control
@@ -189,7 +208,7 @@ function SignUp() {
                   onChange={handleChange}
                   style={inputStyle}
                 />
-                <span className="signup-show-password" onClick={toggleShowPassword}>
+                <span className="signup-show-password" onClick={toggleShowPassword} >
                   {showPassword ? 'Hide' : 'Show'}
                 </span>
               </Form.Group>

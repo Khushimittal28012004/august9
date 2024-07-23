@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getApiBaseUrl } from './apiUtils.js';
 
 export const createItem = async (item) => {
-  const apiBaseUrl = await getApiBaseUrl();
+  const apiBaseUrl = getApiBaseUrl();
   try {
     const response = await axios.post(`${apiBaseUrl}/finalSubmit`, item); // Ensure the endpoint is correct
     return response.data;

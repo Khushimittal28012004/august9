@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
@@ -6,19 +6,30 @@ import './Login.css';
 import { getApiBaseUrl } from '../apiUtils.js'; // Import the utility function
 
 function Login() {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    const savedFormData = JSON.parse(localStorage.getItem('formData'));
+    if (savedFormData) {
+      setFormData(savedFormData);
+    }
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     
     try {
-      const apiBaseUrl = await getApiBaseUrl(); // Fetch the dynamic API base URL
-      const response = await axios.post(`${apiBaseUrl}/login`, { email, password });
+      const apiBaseUrl = await getApiBaseUrl(); // 
+      const response = await axios.post(`${apiBaseUrl}/login`, { email: formData.email, password: formData.password });
+      // check if the login was successful 
       if (response.status === 200) {
+        localStorage.setItem('formData', JSON.stringify(formData)); // Store form data in local storage
         navigate('/home'); // Corrected navigation path
       } else {
         setError('Login failed. Please check your credentials.');
@@ -26,6 +37,11 @@ function Login() {
     } catch (err) {
       setError('Login failed. Please check your credentials.');
     }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   return (
@@ -49,8 +65,9 @@ function Login() {
                   type="email" 
                   placeholder="Enter Your UTD email address" 
                   className="login-form-control" 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                 />
               </Form.Group>
               <Form.Group controlId="formPassword" className="position-relative">
@@ -58,8 +75,9 @@ function Login() {
                   type={showPassword ? "text" : "password"} // Toggle visibility
                   placeholder="Password" 
                   className="login-form-control" 
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
                 />
                 <span className="login-show-password" onClick={() => setShowPassword(!showPassword)}>
                   {showPassword ? "Hide" : "Show"}
