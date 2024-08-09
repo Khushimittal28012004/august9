@@ -1,0 +1,492 @@
+.profile-page {
+  font-family: Arial, sans-serif;
+}
+
+.header-row {
+  background-color: white ;
+  padding: 10px 0;
+  align-items: center;
+  width: 100%;
+
+}
+
+.header-logo {
+  color: #FFFFFF;
+  text-align: center;
+  cursor: pointer;
+  padding-left: 40px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.header-search {
+  background-color: white;
+  border-color: #444444;
+  color: black;
+  width: 60%;
+}
+
+.header-link {
+  color: #FFFFFF;
+  text-align: center;
+  cursor: pointer;
+}
+
+.header-icon {
+  color: #FFFFFF;
+  text-align: center;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+/* ******************** */
+/* .profile-header {
+  position: relative;
+  width: 100%;
+  height: 200px; 
+}
+
+.header-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-info {
+  position: absolute;
+  left: 14%;
+  transform: translateX(-50%);
+  bottom: -50px;
+  display: flex;
+  align-items: center;
+}
+
+.profile-img {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  border: 4px solid white;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  object-fit: cover;
+}
+
+.profile-details {
+  background-color: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin-left: 20px;
+}
+
+.profile-details h1 {
+  margin: 0;
+  font-size: 24px;
+}
+.profile-details p {
+  margin: 5px 0 0 0;
+  color: gray;
+} */
+ /* ************ */
+/* ############################### */
+
+/* Copy code */
+.tabs {
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+  margin-top: 70px; /* Adjust for profile section */
+}
+
+.tabs ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+.tabs li {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.tabs a {
+  margin-left: 10px;
+  margin-right: 10px;
+  text-decoration: none;
+  color: black;
+  font-size: 18px;
+  font-family: Arial, sans-serif;
+  font-weight: normal; /* Remove bold */
+}
+
+/* Underline on hover */
+.tabs a:hover {
+  text-decoration: underline;
+}/* ############################# */
+
+.content {
+  display: flex;
+  margin: 20px;
+  margin-right: auto;
+}
+
+.sidebar {
+  width: 400px;
+  margin-right: 50px;
+}
+
+
+
+
+
+
+/* @@@@@@@@@@@@@@@@@ */
+
+ /* #side {
+  list-style-type: none;
+  padding: 27px;
+}
+
+#side li {
+  margin: 5px 0;
+}
+
+#side li a {
+  text-decoration: none;
+  color: #000; /* Default link color 
+  padding: 5px;
+  display: inline-block;
+  transition: color 0.3s, background-color 0.3s;
+  font-size: 16px;
+}
+
+#side li a:hover {
+  color:#746f6f ; /* Hover text color */
+  ;/* Hover background color
+  font-size: 19px;
+} */
+/* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2 */
+
+
+/* Style for the unordered list */
+#side {
+  list-style-type: none !important;/* Remove default list styling (bullets) */
+  padding: 0;
+  margin: 0;
+  
+}
+
+/* Style for each list item */
+#side li {
+  margin-bottom: 10px; /* Space between boxes */
+}
+
+/* Style for each link inside the list item */
+#side a {
+  display: block; /* Make the link a block element to control size */
+  padding: 6px 15px;
+  margin-bottom: 26px; /* Reduced padding */
+  background-color: #f0f0f0; /* Background color of the box */
+  color: #333; /* Text color */
+  text-decoration: none; /* Remove underline */
+  border: 1px solid #ddd; /* Border around the box */
+  border-radius: 10px; /* Rounded corners */
+  transition: all 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Hover effect for each link */
+#side a:hover {
+  background-color: #e0e0e0; /* Slightly darker background on hover */
+  border-color: #ccc; /* Darker border on hover */
+  transform: scale(1.02); /* Slightly increase size on hover */
+  border-radius: 10px; /* More rounded corners on hover */
+}
+
+/* Style for the active link */
+#side a.active {
+  background-color: #d0d0d0; /* Darker background for the active box */
+  border-color: #bbb; /* Darker border for the active box */
+  transform: scale(1.03); /* Increase size for the active box */
+  border-radius: 10px; /* More rounded corners for the active box */
+}
+
+
+
+
+
+
+/* ############### */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  margin-top: 50px;
+ 
+  margin-right: 17px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* border: 1px solid #ccc; */
+  border-radius: 8px;
+  background-color: #fff;
+  position: relative; /* Added to position the buttons at the bottom */
+  
+  justify-content: space-around;
+    height: 90%;
+}
+
+.info-section {
+  /* margin-bottom: 49px;
+  margin-left: -222px; */
+  margin-bottom: 49px;
+  margin-left: -396px;
+  margin-right: 90px;
+  width: 58%;
+}
+
+
+.category {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 20px;
+
+}
+/* .contact-info{
+  text-align: left;
+  width:150%;
+} */
+.contact-info button,
+  .websites-section button,
+  .public-settings button {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    width: 101%;
+  }
+  
+  .websites-section {
+    margin-top: 20px;
+  }
+  
+  .websites-section h3 {
+    margin-top: 0;
+  }
+  
+  .social-link {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    width:80%;
+  }
+  .social-link input {
+    margin-right: 26px;
+    padding: 3px;
+    flex: 1 1;
+  }
+  
+  .social-link select {
+    padding: 5px;
+  }
+  
+  .actions {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .actions .cancel-btn,
+  .actions .save-btn {
+    height: 40px;
+    padding: 0 20px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  
+  .actions .cancel-btn {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+  }
+  .actions .save-btn {
+    background-color: #4caf50;
+    color: white;
+    border: 1px solid #4caf50;
+  }
+
+/* signout  */
+#signout {
+  background-color: red; /* Bootstrap primary color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  /* margin: 394px 86px 21px 76px; */
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 394px 86px 21px 76px;
+  /* transition: background-color 0.3s ease; */
+}
+
+#signout:hover {
+  background-color: #0056b3; /* Darker shade for hover effect */
+}
+
+
+
+/* links in sidebar  */
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+.profile-header {
+  position: relative;
+  width: 94%;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #d0d0d0;
+  border-bottom-right-radius: 8px;
+  margin-right: 3%;
+  margin-left: 3%;
+  border-bottom-left-radius: 8px;
+}
+
+
+.header-bg-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 94%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  margin-left: 3%;
+    margin-right: 24%;
+    border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px ;
+}
+
+.profile-info {
+  position: relative;
+  display: flex;
+  /* align-items: center; */
+  z-index: 2;
+  margin-bottom: -9%;
+  margin-left: -71%;
+}
+
+.profile-img {
+  width: 172px;
+  height: 172px;
+  border-radius: 50%;
+  border: 3px solid white;
+  object-fit: cover;
+}
+
+.profile-topcard-background-image-edit__icon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.artdeco-button {
+  background-color: white;
+  border: 1px solid #0073b1;
+  color: #0073b1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+}
+
+.artdeco-button__icon {
+  fill: #0073b1;
+}
+
+
+/*/* Popup Menu Styling */ /* Popup Menu Styling */
+/* Popup Menu Styling */
+.popup-menu {
+  position: fixed; /* Center in the viewport */
+  top: 40%;
+  left: 50%;
+   transform: translate(-50%, -50%); 
+   /* Center the popup * */
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+ /* Ensure it appears above other content */
+  /* padding: 20px; Add padding */
+  width: 50%;
+  height: 30%;
+  padding: 24px;
+  margin-bottom: 5%;
+}
+
+.popup-header {
+  display: flex;
+  /* Space between title and close button */
+  align-items: center;
+  margin-bottom: 10px; /* Space between header and buttons */
+}
+
+.popup-title {
+  font-size: 30px; /* Increase font size for heading */
+margin-bottom: 53px;
+  
+}
+
+.popup-cancel{
+  font-size: 21px;
+  cursor: pointer;
+  color: black;
+  margin-left: 60%;
+  margin-top: -6%;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: space-between; /* Space buttons evenly */
+}
+
+.popup-actions button {
+  flex: 1; /* Allow buttons to grow evenly */
+  margin: 0 5px; /* Space between buttons */
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background-color: #f0f0f0;/* Button color */
+  color: black;
+  cursor: pointer;
+  font-size: 16px; /* Increase font size for buttons */
+}
+
+.popup-actions button:hover {
+  border-color: #ccc; 
+  background-color: #d0d0d0;
+  color: black;
+   /* Darker button color on hover */
+   /* Darker button color on hover */
+}

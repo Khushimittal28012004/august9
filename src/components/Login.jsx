@@ -10,6 +10,10 @@ function Login() {
     email: '',
     password: '',
   });
+  const handleForgotPasswordClick = (e) => {
+    e.preventDefault();
+    navigate('/forget-pass');
+  };
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -25,8 +29,8 @@ function Login() {
     e.preventDefault();
     
     try {
-      const apiBaseUrl = await getApiBaseUrl(); // 
-      const response = await axios.post(`${apiBaseUrl}/login`, { email: formData.email, password: formData.password });
+      const apiBaseUrl = await getApiBaseUrl(); 
+      const response = await axios.post(`${apiBaseUrl}/login `, { email: formData.email, password: formData.password });
       // check if the login was successful 
       if (response.status === 200) {
         localStorage.setItem('formData', JSON.stringify(formData)); // Store form data in local storage
@@ -92,7 +96,7 @@ function Login() {
                 LOG IN
               </Button>
               <p className="login-forgot-password">
-                Forgot Password? <a href="#!">Click Here</a>
+                Forgot Password?  <a href="#!" onClick={handleForgotPasswordClick}>Click Here</a>
               </p>
               <Button 
                 variant="success" 
@@ -112,4 +116,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Login;

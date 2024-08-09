@@ -1,5 +1,4 @@
-// lsof -i :5001
-// kill -9 <PID>
+// netstat -ano | findstr :5001
 
 import session from 'express-session';
 import express from 'express';
@@ -11,6 +10,9 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 
 dotenv.config();
+console.log('Session Secret:', process.env.SESSION_SECRET);
+console.log('Port:', process.env.PORT);
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -21,7 +23,7 @@ app.use(express.json());
 
 // CORS Configuration
 const corsOptions = {
-  origin:  `*`,
+  origin: '*',  // Enclose the asterisk in quotes
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
@@ -35,29 +37,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Session configuration
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret:' khushiV' ,
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false } // Set to true if using HTTPS
 }));
 
-
 // Use OTP routes
 app.use('/api', otpRoutes);
-
-// Global variable to store the current port
-// let currentPort = startPort;
-
-// Simplified endpoint to get the current port
-// app.get('/current-port', (req, res) => {
-//   try {
-//     console.log('Received request for current port');
-//     res.json({ port: currentPort });
-//   } catch (error) {
-//     console.error('Error fetching current port:', error);
-//     res.status(500).json({ message: 'Error fetching current port', error: error.message });
-//   }
-// });
 
 // Database models (schemas)
 const userSchema = new mongoose.Schema({
@@ -68,9 +55,9 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', userSchema);
 
-//Login route
+// Login route
 app.post('/login', async (req, res) =>{
-  const {email, password} = req.body;
+  const { email, password } = req.body;
 
   console.log('Login Request:', req.body);
 
@@ -90,7 +77,6 @@ app.post('/login', async (req, res) =>{
     res.status(500).json({ message: 'Server error', error });
   }
 });
-
 
 const academicInfoSchema = new mongoose.Schema({
   userId: { type: mongoose.Types.ObjectId, ref: 'User', required: true },
@@ -179,7 +165,6 @@ app.post('/finalSubmit', async (req, res) => {
     });
     await newCareerInterests.save();
     console.log('CareerInterests created successfully:', newCareerInterests._id);
-
     const newPreviousExperience = new PreviousExperience({
       userId: newUser._id,
       experience,
@@ -213,11 +198,12 @@ app.post('/items', (req, res) => {
 app.get('/current-port', (req, res) => {
   res.json({ port: PORT });
 });
-
 app.listen(PORT, (err) => {
   if (err) {
     console.error('Error starting server:', err);
   } else {
     console.log(`Server is running on port: ${PORT}`);
-  }
+
+  }
 });
+
